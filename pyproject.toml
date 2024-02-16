@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "InterpolatingEFT"
+version = "3.0.0"
+authors = [
+  { name="Tom Runting", email="t.runting23@imperial.ac.uk" },
+]
+description = "Package for interpolating likelihoods in EFT space"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/runtingt/InterpolatingEFT"
+Issues = "https://github.com/runtingt/InterpolatingEFT/issues"
+
+[tool.interrogate]
+fail-under = 95
+exclude = ["*/rbfSpline.py"]
+verbose = 2
+quiet = false
+color = true

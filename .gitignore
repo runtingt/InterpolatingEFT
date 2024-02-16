@@ -1,0 +1,9 @@
+.vscode
+dist
+contours
+*.root
+out/*
+runs
+mypy*
+docs
+__pycache__

@@ -1,0 +1,18 @@
+---
+data:
+  channel: 'hgg_statonly'
+  model: 'STXStoSMEFTExpandedLinearStatOnly3D'
+  type: 'observed'
+  attribute: 'nominal'
+  POIs:
+    lchgXE3: 
+      bounds: [-35, 30]
+    lchwXE2:
+      bounds: [-5,5]
+    lctgreXE1:
+      bounds: [-15, 10]
+  interpmode: "RBF"
+  splitting: "grid"
+  fraction: 0.25
+  subtractbest: False
+...
