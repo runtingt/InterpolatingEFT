@@ -1,5 +1,5 @@
-# HggStatOnlyML
+# InterpolatingEFT
 
-A package for running ML for learning likelihoods from the HggStatOnly data
+A package for interpolating likelihoods in Wilson Coefficient space
 
 This version works with N-dimensional surfaces, using Radial Basis Functions as the interpolator.
