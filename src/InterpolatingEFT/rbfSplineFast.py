@@ -89,15 +89,3 @@ class rbfSplineFast:
         self._weights = np.linalg.solve(A,B)
         self._initialised=True
 
-# ----------------------
-def RBFWrapper(coeffs: List[float], spline: Optional[rbfSplineFast],
-               pois: Optional[List[str]], fixed_idx: Optional[int],
-               fixed_val: Optional[int]):
-    if (spline is None) or (pois is None):
-        return np.nan
-    else:
-        coeffs = list(coeffs)
-        if (fixed_idx is not None) and (fixed_val is not None):
-            coeffs.insert(fixed_idx, fixed_val)
-        pois_map = {poi: coeffs[i] for i, poi in enumerate(pois)}
-        return spline.evaluate(pois_map)

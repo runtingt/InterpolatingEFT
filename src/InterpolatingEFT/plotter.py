@@ -11,7 +11,15 @@ from itertools import combinations
 from typing import List, Tuple
 hep.style.use('CMS')
 
-def plot1D(poi: str, label: str, out: str ='out/default'):
+def plot1D(poi: str, label: str, out: str ='out/default') -> None:
+    """
+    Plot the 1D scan for the specified POI
+
+    Args:
+        poi (str): The poi to plot
+        label (str): The legend entry
+        out (str, optional): The output dir. Defaults to 'out/default'.
+    """
     # Plot
     fig, ax = plt.subplots(1, 1, figsize=(16, 9))    
     for interp in ['combine', 'rbf']:
@@ -45,11 +53,27 @@ def plot1D(poi: str, label: str, out: str ='out/default'):
     plt.savefig(os.path.join(out, f"{poi}.png"), facecolor='white',
                 bbox_inches='tight', dpi=125)
     
-def plotAll1D(pois: List[str], labels: List[str], out: str ='out/default'):
+def plotAll1D(pois: List[str], labels: List[str], out: str ='out/default') -> None:
+    """
+    Plots the 1D scan for the specified POIs
+
+    Args:
+        poi (str): The pois to plot
+        label (str): The legend entries
+        out (str, optional): The output dir. Defaults to 'out/default'.
+    """
     for poi, label in zip(pois, labels):
         plot1D(poi, label, out=out)
         
-def plot2D(pair: Tuple[str, str], label: str, out: str ='out/default'):
+def plot2D(pair: Tuple[str, str], label: str, out: str ='out/default') -> None:
+    """
+    Plots the 2D scan for the specified POI pair
+
+    Args:
+        pair (str): The pair to plot
+        label (str): The legend entry
+        out (str, optional): The output dir. Defaults to 'out/default'.
+    """
     # Plot
     fig, ax = plt.subplots(1, 1, figsize=(16, 9))    
     for interp in ['combine', 'rbf']:
@@ -90,7 +114,15 @@ def plot2D(pair: Tuple[str, str], label: str, out: str ='out/default'):
     plt.savefig(os.path.join(out, f"{pair[0]}_{pair[1]}.png"), 
                 facecolor='white', bbox_inches='tight', dpi=125)
     
-def plotAll2D(pois: List[str], labels: List[str], out: str ='out/default'):
+def plotAll2D(pois: List[str], labels: List[str], out: str ='out/default') -> None:
+    """
+    Plots the 2D scan for the specified POI pairs
+
+    Args:
+        pois (str): The pois to plot, pairwise
+        label (str): The legend entries
+        out (str, optional): The output dir. Defaults to 'out/default'.
+    """
     poi_pairs = list(combinations(pois, 2))
     for pair, label in zip(poi_pairs, labels):
         plot2D(pair, label, out=out)

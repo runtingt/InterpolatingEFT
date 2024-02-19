@@ -7,7 +7,7 @@ import torch
 import uproot
 import pandas as pd
 from torch.utils.data import Dataset
-from typing import List, Tuple, Any, Dict, Sequence
+from typing import List, Tuple, Any, Dict
 
 def loadData(filename: str, POIs: List[str],
              include_best: bool=False) -> pd.DataFrame:
@@ -20,8 +20,7 @@ def loadData(filename: str, POIs: List[str],
         include_best (bool): Include the best-fit point. Defaults to False
 
     Returns:
-        Tuple[pd.DataFrame, pd.DataFrame]: Dataframes with the grid data and\
-            best fit value
+        pd.DataFrame: The data as a dataframe with a column for each WC
     """
     # Get dataframe
     file = uproot.open(filename)
@@ -76,6 +75,7 @@ class NLLDataset(Dataset[Any]):
         self.X = X.clone().detach().to(torch.float32)
         self.Y = Y.clone().detach().to(torch.float32)
         self.POIs = POIs
+
     def __len__(self) -> int:
         """
         Gets the length of the input data
@@ -84,8 +84,9 @@ class NLLDataset(Dataset[Any]):
             int: The length of the input data
         """
         return len(self.X)
-    def __getitem__(self, 
-                    index: int | List[int]) -> Tuple[torch.Tensor, torch.Tensor]:
+
+    def __getitem__(self, index: int | List[int]) -> Tuple[torch.Tensor, 
+                                                           torch.Tensor]:
         """
         Gets a single item from the dataset
 
@@ -98,6 +99,15 @@ class NLLDataset(Dataset[Any]):
         return self.X[index], self.Y[index]
 
     def append(self, new: NLLDataset) -> None:
+        """
+        Appends a new dataset to the end of this dataset
+
+        Args:
+            new (NLLDataset): The dataset to append
+
+        Raises:
+            ValueError: Raised if the datasets have different coefficients
+        """
         if self.POIs != new.POIs:
             raise ValueError("Datsets must have the same POIs, not " +
                              f"{self.POIs} and {new.POIs}")
@@ -105,7 +115,13 @@ class NLLDataset(Dataset[Any]):
             self.X = torch.cat((self.X, new.X))
             self.Y = torch.cat((self.Y, new.Y))
             
-    def toFrame(self) -> pd.DataFrame: 
+    def toFrame(self) -> pd.DataFrame:
+        """
+        Converts a NLLDataset to a dataframe
+
+        Returns:
+            pd.DataFrame: The dataset as a dataframe
+        """
         # Build columns dictionary
         d = {}
         for poi, idx in self.POIs.items():
@@ -115,18 +131,3 @@ class NLLDataset(Dataset[Any]):
         # Convert to df
         df = pd.DataFrame(data=d)
         return df
-    
-    def toDict(self) -> List[Dict[str, Any]]:
-        # Convert to list of dicts
-        data = []
-        for elem_x, elem_y in zip(self.X, self.Y):
-            d = {}
-            assert isinstance(elem_x, torch.Tensor)
-            assert isinstance(elem_y, torch.Tensor)
-            for key, val in self.POIs.items():
-                d[key] = elem_x.detach().numpy()[val]
-                d[key] = elem_x.detach().numpy()[val]
-            d["deltaNLL"] = elem_y.detach().numpy()[0]
-            data.append(d)
-        
-        return data

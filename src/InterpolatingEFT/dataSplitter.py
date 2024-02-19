@@ -74,7 +74,6 @@ class RandomSplitter(Splitter):
         Returns:
             List[Subset]: The training and test datasets as subsets
         """
-        
         super().split(train_split)
         
         # Get indices
@@ -194,7 +193,24 @@ class GridSplitter(Splitter):
         return [Subset(self.dataset, list(idxs_train)), Subset(self.dataset, list(idxs_test))]
         
 def loadAndSplit(file: str, data_config: Data, split: float,
-                 include_best: bool=False):
+                 include_best: bool=False) -> Tuple[Subset[NLLDataset],
+                                                    Subset[NLLDataset]]:
+    """
+    Loads the dataset as a train/test split
+
+    Args:
+        file (str): The file to load the dataset from
+        data_config (Data): Options for the data
+        split (float): The train fraction
+        include_best (bool, optional): Include the best fit point.\
+            Defaults to False.
+
+    Raises:
+        NotImplementedError: Raised if an option other than 'grid' is specified
+
+    Returns:
+        Tuple[Subset[NLLDataset], Subset[NLLDataset]]: The train/test split
+    """
     # Load
     poi_map = {poi: i for i, poi in enumerate(data_config["POIs"])}
     X, Y = toTorch(file, list(data_config["POIs"].keys()), include_best=include_best)

@@ -16,6 +16,13 @@ from interpolator import rbfInterpolator, Combine1D, Combine2D
 from logger import TqdmToLogger
 
 def profileCombine1D(data_config: Data, out: str='out/default') -> None:
+    """
+    Extracts the data from the 1D Combine scans for all POIs
+
+    Args:
+        data_config (Data): Options for the data
+        out (str, optional): The out dir. Defaults to 'out/default'.
+    """
     pois = list(data_config["POIs"].keys())
     for poi in pois:
         interp = Combine1D(data_config, poi)
@@ -26,6 +33,13 @@ def profileCombine1D(data_config: Data, out: str='out/default') -> None:
             pickle.dump(d, f)
             
 def profileCombine2D(data_config: Data, out: str='out/default') -> None:
+    """
+    Extracts the data from the 2D pairwise Combine scans for all POIs
+
+    Args:
+        data_config (Data): Options for the data
+        out (str, optional): The out dir. Defaults to 'out/default'.
+    """
     pois = list(data_config["POIs"].keys())
     poi_pairs = list(combinations(pois, 2))
     for pair in poi_pairs:
@@ -36,12 +50,28 @@ def profileCombine2D(data_config: Data, out: str='out/default') -> None:
         with open(os.path.join(out, f"{pair_name}_combine.pkl"), "wb") as f:
             pickle.dump(interp.data_2d, f)
             
-def profileCombine(data_config: Data, out: str='out/default'):
+def profileCombine(data_config: Data, out: str='out/default') -> None:
+    """
+    Extracts the data from the 1D and 2D Combine scans
+
+    Args:
+        data_config (Data): Options for the data
+        out (str, optional): The out dir. Defaults to 'out/default'.
+    """
     profileCombine1D(data_config, out)
     profileCombine2D(data_config, out)
 
 def profile1D(interp: rbfInterpolator, poi: str, 
               num: int=50, out: str='out/default') -> None:
+    """
+    Get the 1D profiled scan for the specified POI, using an interpolator
+
+    Args:
+        interp (rbfInterpolator): The interpolator to use
+        poi (str): The poi to scan
+        num (int, optional): The number of scan points. Defaults to 50.
+        out (str, optional): The out dir. Defaults to 'out/default'.
+    """
     # Get free keys
     free_keys = [key for key in interp.pois if key != poi]
     
@@ -64,11 +94,31 @@ def profile1D(interp: rbfInterpolator, poi: str,
    
 def profileAll1D(interp: rbfInterpolator, pois: List[str], 
                  num: int=50, out: str='out/default') -> None:
+    """
+    Get the 1D profiled scan for all POIs, using an interpolator
+
+    Args:
+        interp (rbfInterpolator): The interpolator to use
+        pois (str): The pois to scan
+        num (int, optional): The number of scan points. Defaults to 50.
+        out (str, optional): The out dir. Defaults to 'out/default'.
+    """
     for poi in pois:
         profile1D(interp, poi, num=num, out=out)
 
 def profile2D(interp: rbfInterpolator, num: int, 
               out: str, pois: List[str]) -> None:
+    """
+    Get the 2D pairwise profiled scan for the pois specified, \
+        using an interpolator
+
+    Args:
+        interp (rbfInterpolator): The interpolator to use
+        num (int, optional): The number of scan points. Defaults to 50.
+        out (str, optional): The out dir. Defaults to 'out/default'.
+        pois (str): The poi pair to scan
+    """
+    
     logging.basicConfig(format='%(asctime)s [%(levelname)-8s] %(message)s',
                         filename=os.path.join(out, f'{pois[0]}_{pois[1]}.log'),
                         filemode='w')
@@ -107,6 +157,15 @@ def profile2D(interp: rbfInterpolator, num: int,
         
 def profileAll2D(interp: rbfInterpolator, pois: List[str], 
                  num: int=10, out: str='out/default') -> None:
+    """
+    Get the 2D pairwise profiled scan for all POIs, using an interpolator
+
+    Args:
+        interp (rbfInterpolator): The interpolator to use
+        pois (str): The pois to scan
+        num (int, optional): The number of scan points. Defaults to 50.
+        out (str, optional): The out dir. Defaults to 'out/default'.
+    """
     poi_pairs = list(combinations(pois, 2))
     profile_part = partial(profile2D, interp, num, out)
     with concurrent.futures.ProcessPoolExecutor(max_workers=None) as executor:
