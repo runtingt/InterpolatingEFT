@@ -6,12 +6,11 @@ across a grid
 import torch
 import numpy as np
 import numpy.typing as npt
-import pandas as pd
-from typing import List, Dict, Any, Tuple
+from typing import List, Tuple
 from abc import ABC, abstractmethod
-from torch.utils.data import Subset, DataLoader
-from dataLoader import toTorch, NLLDataset, loadData
-from utils import Data, Training
+from torch.utils.data import Subset
+from dataLoader import toTorch, NLLDataset
+from utils import Data
 
 NLLEntry = Tuple[torch.Tensor, torch.Tensor]
 
@@ -192,95 +191,8 @@ class GridSplitter(Splitter):
         # train_split_actual = len(idxs_train)/(len(idxs_train)+len(idxs_test))
         # print(f"Target was {train_split:.2%} training data,",
         #       f"actual was {train_split_actual:.2%}")
-            
         return [Subset(self.dataset, list(idxs_train)), Subset(self.dataset, list(idxs_test))]
         
-def dataToDict(dataset: NLLDataset) -> List[Dict[str, Any]]:
-    """
-    Converts the data to an array of dictionaries with format {x, y, val}.
-    
-    Args:
-        dataset (NLLDataset): The dataset to convert
-
-    Returns:
-        List[Dict]: List with a dictionary for each data point
-    """
-    
-    # Convert training dataset to dictionary
-    data = []
-    for elem_x, elem_y in zip(dataset.X, dataset.Y):
-        d = {}
-        assert isinstance(elem_x, torch.Tensor)
-        assert isinstance(elem_y, torch.Tensor)
-        for key, val in dataset.POIs.items():
-            d[key] = elem_x.detach().numpy()[val]
-            d[key] = elem_x.detach().numpy()[val]
-        d["deltaNLL"] = elem_y.detach().numpy()[0]
-        data.append(d)
-    
-    return data
-
-def dataToFrame(dataset: NLLDataset) -> pd.DataFrame:
-    """
-    Converts data to a dataframe
-    
-    Args:
-        dataset (NLLDataset): The dataset to convert
-
-    Returns:
-        pd.DataFrame: The dataset as a dataframe
-    """
-    
-    # Build columns dictionary
-    d = {}
-    for poi, idx in dataset.POIs.items():
-        d[poi] = dataset.X[:, idx].detach().numpy()
-    d['deltaNLL'] = dataset.Y.detach().numpy().flatten()
-    
-    df = pd.DataFrame(data=d)
-    return df
-
-# def loadAll(data_params: Data, 
-#             training_params: Training) -> DataLoader[NLLDataset]:
-#     """
-#     Loads the entire dataset
-
-#     Args:
-#         data_params (Data): Options specifying the data
-#         training_params (Training): Options specifying the training
-
-#     Raises:
-#         ValueError: Raised if the data mode isn't 'NLL' or 'Likelihood'
-
-#     Returns:
-#         DataLoader[NLLDataset]: The entire dataset
-#     """
-#     # Grab data
-#     X, Y = toTorch(data_params["file"])  
-    
-#     # Subtract best-fit vector
-#     if data_params["subtractbest"]:
-#         # Load best fit
-#         best_fit = loadData(data_params["file"])[1]
-#         coord = best_fit[["lchgXE3", "lchwXE2"]].iloc[0].to_numpy()
-#         X -= coord 
-    
-#     # Convert Y
-#     if data_params["mode"] == "likelihood":
-#         Y = torch.exp(-training_params["temperature"]*Y)
-#     elif data_params["mode"] == "NLL":
-#         pass
-#     else:
-#         raise ValueError("Mode must be 'NLL' or 'likelihood' " + 
-#                          f"not {data_params['mode']}")
-#     dataset = NLLDataset(X, Y)
-        
-#     # Pass into loaders
-#     loader = DataLoader(dataset, shuffle=False, 
-#                         batch_size=len(X))
-
-#     return loader
-
 def loadAndSplit(file: str, data_config: Data, split: float,
                  include_best: bool=False):
     # Load
@@ -294,34 +206,4 @@ def loadAndSplit(file: str, data_config: Data, split: float,
         train, test = gs.split(split)
         return train, test
     else:
-        raise NotImplementedError("Only grid splitting is implemented")
-
-# if __name__ =="__main__":
-#     # Grab data
-#     X, Y = toTorch("data/scan.hgg_statonly.STXStoSMEFTExpandedLinearStatOnly"
-#                    ".observed.nominal.lchgXE3_lchwXE2.root")
-#     dataset = NLLDataset(X, Y)
-    
-#     # Test random
-#     rs = RandomSplitter(dataset)
-#     rs_split = rs.split(0.9)
-#     print(list(map(len, rs_split)))
-    
-#     # Test grid
-#     gs = GridSplitter(dataset)
-#     gs_split = gs.split(0.25**2)
-#     print(list(map(len, gs_split)))
-    
-#     import matplotlib.pyplot as plt
-#     plt.figure(figsize=(10, 10))
-#     plt.scatter(X.detach().numpy()[gs_split[0].indices][:, 0],
-#                 X.detach().numpy()[gs_split[0].indices][:, 1],
-#                 c='k', s=100, label="Train")
-#     plt.scatter(X.detach().numpy()[gs_split[1].indices][:, 0],
-#                 X.detach().numpy()[gs_split[1].indices][:, 1],
-#                 c='r', s=0.5, label="Test")
-#     plt.legend(loc='upper right')
-#     plt.savefig("../plots/grid_6.png", bbox_inches='tight')
-    
-#     # dataToDict(1)
-    
+        raise NotImplementedError("Only grid splitting is implemented")    

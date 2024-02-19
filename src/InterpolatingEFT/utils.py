@@ -5,7 +5,7 @@ Utilities for handling model configurations
 import os
 import torch
 import yaml
-from typing import TypedDict, Callable, Dict, List
+from typing import TypedDict, Callable, Dict, List, Any, NotRequired
 
 WeightedLoss = Callable[[torch.Tensor, torch.Tensor, float], torch.Tensor]
 
@@ -55,7 +55,7 @@ class Data(TypedDict):
     type: str
     attribute: str
     POIs: Dict[str, Dict[str, List[int]]]
-    mode: str
+    interpolator: Dict[str, Any]
     splitting: str
     fraction: float
     subtractbest: bool
@@ -67,9 +67,9 @@ class Config(TypedDict):
     Args:
         TypedDict (TypedDict): Base class for TypedDict
     """
-    training: Training
-    model: Model
-    data: Data
+    training: NotRequired[Training]
+    model: NotRequired[Model]
+    data: NotRequired[Data]
 
 class Accessories(TypedDict):
     """
@@ -94,5 +94,5 @@ def loadConfig(filename: str) -> Config:
     """
     with open(os.path.abspath(filename)) as f:
         config = yaml.safe_load(f)
-    config = Config(config)
+    config = Config(**config)
     return config

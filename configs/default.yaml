@@ -11,8 +11,10 @@ data:
       bounds: [-5,5]
     lctgreXE1:
       bounds: [-15, 10]
-  interpmode: "RBF"
+  interpolator:
+    mode: "RBF"
+    eps: 0.2
   splitting: "grid"
-  fraction: 0.25
+  fraction: 0.50
   subtractbest: False
 ...

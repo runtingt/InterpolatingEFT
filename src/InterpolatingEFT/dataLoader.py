@@ -40,7 +40,7 @@ def loadData(filename: str, POIs: List[str],
     return df
 
 def toTorch(file: str, POIs: List[str],
-             include_best: bool=False) -> List[torch.Tensor]:
+            include_best: bool=False) -> List[torch.Tensor]:
     """
     Convert data from a ROOT file into torch datasets for input and
     target data
@@ -96,6 +96,7 @@ class NLLDataset(Dataset[Any]):
             Tuple[torch.Tensor, torch.Tensor]: The retrieved item
         """
         return self.X[index], self.Y[index]
+
     def append(self, new: NLLDataset) -> None:
         if self.POIs != new.POIs:
             raise ValueError("Datsets must have the same POIs, not " +
@@ -103,3 +104,29 @@ class NLLDataset(Dataset[Any]):
         else:
             self.X = torch.cat((self.X, new.X))
             self.Y = torch.cat((self.Y, new.Y))
+            
+    def toFrame(self) -> pd.DataFrame: 
+        # Build columns dictionary
+        d = {}
+        for poi, idx in self.POIs.items():
+            d[poi] = self.X[:, idx].detach().numpy()
+        d['deltaNLL'] = self.Y.detach().numpy().flatten()
+        
+        # Convert to df
+        df = pd.DataFrame(data=d)
+        return df
+    
+    def toDict(self) -> List[Dict[str, Any]]:
+        # Convert to list of dicts
+        data = []
+        for elem_x, elem_y in zip(self.X, self.Y):
+            d = {}
+            assert isinstance(elem_x, torch.Tensor)
+            assert isinstance(elem_y, torch.Tensor)
+            for key, val in self.POIs.items():
+                d[key] = elem_x.detach().numpy()[val]
+                d[key] = elem_x.detach().numpy()[val]
+            d["deltaNLL"] = elem_y.detach().numpy()[0]
+            data.append(d)
+        
+        return data

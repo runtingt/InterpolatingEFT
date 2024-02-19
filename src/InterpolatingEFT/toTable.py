@@ -2,6 +2,7 @@
 Converts a .yaml file to a html table
 """
 
+import os
 import yaml
 from typing import Dict, Any
 
@@ -97,11 +98,10 @@ def toTable(file, name) -> None:
             yaml_data = yaml.safe_load(yaml_file)
             if isinstance(yaml_data, dict):
                 html_table = dictToHTML(yaml_data)
-                with open(f"out/{name}/config.html", 'w') as html_file:
+                with open(os.path.join(f"{name}", "config.html"), 'w') as html_file:
                     html_file.write(wrapper+html_table+"</div>")
                 print("HTML table generated successfully.")
             else:
                 print("Invalid YAML format. Please provide a dictionary.")
         except yaml.YAMLError as exc:
             print(f"Error reading YAML file: {exc}")
-

@@ -23,7 +23,7 @@ Issues = "https://github.com/runtingt/InterpolatingEFT/issues"
 
 [tool.interrogate]
 fail-under = 95
-exclude = ["*/rbfSpline.py"]
+exclude = ["*/rbfSplineFast.py"]
 verbose = 2
 quiet = false
 color = true
