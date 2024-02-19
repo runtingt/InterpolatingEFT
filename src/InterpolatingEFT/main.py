@@ -6,15 +6,15 @@ import os
 import argparse
 from datetime import datetime
 from pathlib import Path
-from interpolator import rbfInterpolator
-from profiler import profileCombine, profileAll1D, profileAll2D
-from plotter import plotAll1D, plotAll2D
-from utils import loadConfig
-from toTable import toTable
+from InterpolatingEFT.interpolator import rbfInterpolator
+from InterpolatingEFT.profiler import profileCombine, profileAll1D, profileAll2D
+from InterpolatingEFT.plotter import plotAll1D, plotAll2D
+from InterpolatingEFT.utils import loadConfig
+from InterpolatingEFT.toTable import toTable
 
 if __name__ == "__main__":
     stime = datetime.now()
-    os.chdir("../..") # For testing only
+    os.chdir("..") # For testing only
     
     # Parse args
     parser = argparse.ArgumentParser("Interpolating EFT")

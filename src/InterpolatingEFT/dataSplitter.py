@@ -9,8 +9,8 @@ import numpy.typing as npt
 from typing import List, Tuple
 from abc import ABC, abstractmethod
 from torch.utils.data import Subset
-from dataLoader import toTorch, NLLDataset
-from utils import Data
+from InterpolatingEFT.dataLoader import toTorch, NLLDataset
+from InterpolatingEFT.utils import Data
 
 NLLEntry = Tuple[torch.Tensor, torch.Tensor]
 

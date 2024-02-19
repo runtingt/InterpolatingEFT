@@ -9,10 +9,10 @@ import uproot
 from copy import deepcopy
 from typing import Any, Dict, List
 from abc import ABC, abstractmethod
-from utils import Data
-from dataSplitter import loadAndSplit
-from dataLoader import NLLDataset, loadData
-from rbfSplineFast import rbfSplineFast
+from InterpolatingEFT.utils import Data
+from InterpolatingEFT.dataSplitter import loadAndSplit
+from InterpolatingEFT.dataLoader import NLLDataset, loadData
+from InterpolatingEFT.rbfSplineFast import rbfSplineFast
 from scipy.optimize import OptimizeResult, minimize
 
 class Combine1D:

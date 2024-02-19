@@ -11,9 +11,9 @@ import concurrent.futures
 from functools import partial
 from itertools import combinations
 from typing import List
-from utils import Data
-from interpolator import rbfInterpolator, Combine1D, Combine2D
-from logger import TqdmToLogger
+from InterpolatingEFT.utils import Data
+from InterpolatingEFT.interpolator import rbfInterpolator, Combine1D, Combine2D
+from InterpolatingEFT.logger import TqdmToLogger
 
 def profileCombine1D(data_config: Data, out: str='out/default') -> None:
     """
@@ -118,7 +118,7 @@ def profile2D(interp: rbfInterpolator, num: int,
         out (str, optional): The out dir. Defaults to 'out/default'.
         pois (str): The poi pair to scan
     """
-    
+    # Setup logging
     logging.basicConfig(format='%(asctime)s [%(levelname)-8s] %(message)s',
                         filename=os.path.join(out, f'{pois[0]}_{pois[1]}.log'),
                         filemode='w')
