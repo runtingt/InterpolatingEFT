@@ -6,5 +6,4 @@ out/*
 runs
 mypy*
 .mypy*
-docs
 __pycache__

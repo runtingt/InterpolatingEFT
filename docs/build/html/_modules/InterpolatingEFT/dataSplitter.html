@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InterpolatingEFT.dataSplitter &mdash; InterpolatingEFT v3.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5773a0da"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            InterpolatingEFT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">InterpolatingEFT</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">InterpolatingEFT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">InterpolatingEFT.dataSplitter</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for InterpolatingEFT.dataSplitter</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Splits the dataset int testing and training data, either randomly or uniformly</span>
+<span class="sd">across a grid</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.typing</span> <span class="k">as</span> <span class="nn">npt</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">Subset</span>
+<span class="kn">from</span> <span class="nn">InterpolatingEFT.dataLoader</span> <span class="kn">import</span> <span class="n">toTorch</span><span class="p">,</span> <span class="n">NLLDataset</span>
+<span class="kn">from</span> <span class="nn">InterpolatingEFT.utils</span> <span class="kn">import</span> <span class="n">Data</span>
+
+<span class="n">NLLEntry</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Splitter">
+<a class="viewcode-back" href="../../InterpolatingEFT.html#InterpolatingEFT.dataSplitter.Splitter">[docs]</a>
+<span class="k">class</span> <span class="nc">Splitter</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Abstract base class for a generic data splitter</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ABC (ABC): Helper class for abstract base classes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">NLLDataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialises the splitter with a dataset</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dataset (NLLDataset): The dataset to be split</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span>
+    
+<div class="viewcode-block" id="Splitter.split">
+<a class="viewcode-back" href="../../InterpolatingEFT.html#InterpolatingEFT.dataSplitter.Splitter.split">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_split</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Subset</span><span class="p">[</span><span class="n">NLLDataset</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Split the dataset, reserving a fraction train_split for training</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            train_split (float): The fraction of data for training</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Subset]: The training and test datasets as subsets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Range check</span>
+        <span class="k">assert</span> <span class="n">train_split</span> <span class="o">&lt;=</span> <span class="mf">1.0</span>
+        <span class="k">assert</span> <span class="n">train_split</span> <span class="o">&gt;=</span> <span class="mf">0.0</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+</div>
+
+        
+<div class="viewcode-block" id="RandomSplitter">
+<a class="viewcode-back" href="../../InterpolatingEFT.html#InterpolatingEFT.dataSplitter.RandomSplitter">[docs]</a>
+<span class="k">class</span> <span class="nc">RandomSplitter</span><span class="p">(</span><span class="n">Splitter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Splits the dataset randomly</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Splitter (Splitter): Abstract base splitter class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">NLLDataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialises the splitter with a dataset</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dataset (NLLDataset): The dataset to be split</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    
+<div class="viewcode-block" id="RandomSplitter.split">
+<a class="viewcode-back" href="../../InterpolatingEFT.html#InterpolatingEFT.dataSplitter.RandomSplitter.split">[docs]</a>
+    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_split</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Subset</span><span class="p">[</span><span class="n">NLLDataset</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Split the dataset, reserving a fraction train_split for training</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            train_split (float): The fraction of data for training</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Subset]: The training and test datasets as subsets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">train_split</span><span class="p">)</span>
+        
+        <span class="c1"># Get indices</span>
+        <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">))</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span>
+
+        <span class="c1"># Split</span>
+        <span class="n">split_point</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">idxs</span><span class="p">)</span><span class="o">*</span><span class="n">train_split</span><span class="p">)</span>
+        <span class="n">idxs_train</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">idxs</span><span class="p">[:</span><span class="n">split_point</span><span class="p">])</span>
+        <span class="n">idxs_test</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">idxs</span><span class="p">[</span><span class="n">split_point</span><span class="p">:])</span>
+        
+        <span class="k">return</span> <span class="p">[</span><span class="n">Subset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="n">idxs_train</span><span class="p">),</span> <span class="n">Subset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="n">idxs_test</span><span class="p">)]</span></div>
+</div>
+
+    
+<div class="viewcode-block" id="GridSplitter">
+<a class="viewcode-back" href="../../InterpolatingEFT.html#InterpolatingEFT.dataSplitter.GridSplitter">[docs]</a>
+<span class="k">class</span> <span class="nc">GridSplitter</span><span class="p">(</span><span class="n">Splitter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Splits the dataset uniuformly across a grid</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        Splitter (Splitter): Abstract base splitter class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">NLLDataset</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialises the splitter with a dataset</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            dataset (NLLDataset): The dataset to be split</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_unique</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                    <span class="n">arr</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the unique elements along an axis</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            arr (npt.NDArray[np.float32]): The input array</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            npt.NDArray[np.float32]: The unique elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_axis_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arr</span><span class="p">:</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the number of unique elements along an axis</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            arr (npt.NDArray[np.float32]): The array to get the size of</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: The size of the axis</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_unique</span><span class="p">(</span><span class="n">arr</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_get_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="o">.</span><span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets num evenly-spaced points along an axis of length size</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            size (int): The length of the axis</span>
+<span class="sd">            num (int): The number of points to get</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            npt.NDArray[int]: The indices of the selected points</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GridSplitter.split">
+<a class="viewcode-back" href="../../InterpolatingEFT.html#InterpolatingEFT.dataSplitter.GridSplitter.split">[docs]</a>
+    <span class="k">def</span> <span class="nf">split</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train_split</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Subset</span><span class="p">[</span><span class="n">NLLDataset</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Split the dataset, reserving a fraction train_split for training</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            train_split (float): The fraction of data for training</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[Subset]: The training and test datasets as subsets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">train_split</span><span class="p">)</span>
+        
+        <span class="c1"># To get a fraction &#39;x&#39; of the overall dataset, </span>
+        <span class="c1"># we need x^(1/n) in each of the n dimensions</span>
+        <span class="n">ndims</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">train_split_per_dim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">train_split</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">ndims</span><span class="p">)</span>
+        
+        <span class="c1"># Get the grid size</span>
+        <span class="n">grid_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_axis_size</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> 
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+        
+        <span class="c1"># Get x^(1/n)*size evenly-spaced points in each axis</span>
+        <span class="c1"># TODO vectorize</span>
+        <span class="n">chosen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+        <span class="n">num_per_dim</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">grid_size</span><span class="o">*</span><span class="n">train_split_per_dim</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">num_per_dim</span><span class="p">)):</span>
+            <span class="n">unique_idxs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_points</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span>
+            <span class="n">unique</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()[:,</span> <span class="n">i</span><span class="p">])</span>            
+            <span class="n">chosen</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">unique</span><span class="p">[</span><span class="n">unique_idxs</span><span class="p">]</span>
+        
+        <span class="c1"># Get idxs for grid points from larger array, along each axis</span>
+        <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ndims</span><span class="p">):</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()[:,</span> <span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">chosen</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">idxs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idxs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">axis</span> <span class="o">==</span> <span class="n">val</span><span class="p">))</span>
+                
+        <span class="c1"># Get train-test indices</span>
+        <span class="n">idxs_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ndims</span><span class="p">):</span>
+            <span class="n">idxs_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">idxs_train</span><span class="p">,</span> <span class="n">idxs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">idxs_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                 <span class="n">idxs_train</span><span class="p">)</span>
+        
+        <span class="c1"># Report how close we got to target percentage</span>
+        <span class="c1"># train_split_actual = len(idxs_train)/(len(idxs_train)+len(idxs_test))</span>
+        <span class="c1"># print(f&quot;Target was {train_split:.2%} training data,&quot;,</span>
+        <span class="c1">#       f&quot;actual was {train_split_actual:.2%}&quot;)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Subset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">idxs_train</span><span class="p">)),</span> <span class="n">Subset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">idxs_test</span><span class="p">))]</span></div>
+</div>
+
+        
+<div class="viewcode-block" id="loadAndSplit">
+<a class="viewcode-back" href="../../InterpolatingEFT.html#InterpolatingEFT.dataSplitter.loadAndSplit">[docs]</a>
+<span class="k">def</span> <span class="nf">loadAndSplit</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data_config</span><span class="p">:</span> <span class="n">Data</span><span class="p">,</span> <span class="n">split</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">include_best</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Subset</span><span class="p">[</span><span class="n">NLLDataset</span><span class="p">],</span>
+                                                    <span class="n">Subset</span><span class="p">[</span><span class="n">NLLDataset</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads the dataset as a train/test split</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file (str): The file to load the dataset from</span>
+<span class="sd">        data_config (Data): Options for the data</span>
+<span class="sd">        split (float): The train fraction</span>
+<span class="sd">        include_best (bool, optional): Include the best fit point.\</span>
+<span class="sd">            Defaults to False.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        NotImplementedError: Raised if an option other than &#39;grid&#39; is specified</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple[Subset[NLLDataset], Subset[NLLDataset]]: The train/test split</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Load</span>
+    <span class="n">poi_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">poi</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">poi</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_config</span><span class="p">[</span><span class="s2">&quot;POIs&quot;</span><span class="p">])}</span>
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span> <span class="o">=</span> <span class="n">toTorch</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">data_config</span><span class="p">[</span><span class="s2">&quot;POIs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">include_best</span><span class="o">=</span><span class="n">include_best</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">NLLDataset</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">poi_map</span><span class="p">)</span>
+    
+    <span class="c1"># Split</span>
+    <span class="k">if</span> <span class="n">data_config</span><span class="p">[</span><span class="s2">&quot;splitting&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
+        <span class="n">gs</span> <span class="o">=</span> <span class="n">GridSplitter</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">split</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Only grid splitting is implemented&quot;</span><span class="p">)</span>    </div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tom Runting.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

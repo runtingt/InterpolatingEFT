@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InterpolatingEFT.toTable &mdash; InterpolatingEFT v3.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5773a0da"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            InterpolatingEFT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">InterpolatingEFT</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">InterpolatingEFT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">InterpolatingEFT.toTable</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for InterpolatingEFT.toTable</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Converts a .yaml file to a html table</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="n">css_style</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">&lt;style&gt;</span>
+<span class="s2">    .custom-table {</span>
+<span class="s2">        margin: 10px;</span>
+<span class="s2">        padding: 10px;</span>
+<span class="s2">        border: 1px solid #dddfe1;</span>
+<span class="s2">        border-radius: 5px;</span>
+<span class="s2">        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);</span>
+<span class="s2">    }</span>
+<span class="s2">    table {</span>
+<span class="s2">        border-collapse: collapse;</span>
+<span class="s2">        font-family: Tahoma, Geneva, sans-serif;</span>
+<span class="s2">        width: 100%;</span>
+<span class="s2">        margin-top: 20px;</span>
+<span class="s2">        margin-bottom: 20px;</span>
+<span class="s2">    }</span>
+<span class="s2">    table td {</span>
+<span class="s2">        padding: 15px;</span>
+<span class="s2">    }</span>
+<span class="s2">    table thead td {</span>
+<span class="s2">        background-color: #54585d;</span>
+<span class="s2">        color: #ffffff;</span>
+<span class="s2">        font-weight: bold;</span>
+<span class="s2">        font-size: 13px;</span>
+<span class="s2">        border: 1px solid #54585d;</span>
+<span class="s2">    }</span>
+<span class="s2">    table tbody td {</span>
+<span class="s2">        color: #636363;</span>
+<span class="s2">        border: 1px solid #dddfe1;</span>
+<span class="s2">    }</span>
+<span class="s2">    table tbody tr {</span>
+<span class="s2">        background-color: #f9fafb;</span>
+<span class="s2">    }</span>
+<span class="s2">    table tbody tr:nth-child(odd) {</span>
+<span class="s2">        background-color: #ffffff;</span>
+<span class="s2">    }</span>
+<span class="s2">&lt;/style&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="n">wrapper</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;div class=&#39;custom-table&#39;&gt;</span><span class="si">{</span><span class="n">css_style</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<div class="viewcode-block" id="dictToHTML">
+<a class="viewcode-back" href="../../InterpolatingEFT.html#InterpolatingEFT.toTable.dictToHTML">[docs]</a>
+<span class="k">def</span> <span class="nf">dictToHTML</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">indent</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+               <span class="n">from_top</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a dictionary to html</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data (Dict[str, Any]): The data to convert</span>
+<span class="sd">        indent (int, optional): The indent level. Defaults to 0.</span>
+<span class="sd">        from_top (bool, optional): Whether the calling function had a zero indent.\</span>
+<span class="sd">            Defaults to True.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The dictionary as html</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># Header</span>
+        <span class="k">if</span> <span class="n">indent</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">from_top</span><span class="p">:</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&lt;table border=1&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;&lt;tr&gt;&quot;</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;td style=&#39;font-weight: bold;&#39; colspan=&#39;2&#39;&gt;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&lt;/td&gt;&quot;</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;&lt;/tr&gt;&quot;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;&lt;tr&gt;&quot;</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;td colspan=&#39;2&#39;&gt;</span><span class="si">{</span><span class="s1">&#39;&amp;nbsp&#39;</span><span class="o">*</span><span class="n">indent</span><span class="o">*</span><span class="mi">6</span><span class="si">}{</span><span class="n">key</span><span class="si">}</span><span class="s2">&lt;/td&gt;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;&lt;tr&gt;&quot;</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;td&gt;</span><span class="si">{</span><span class="s1">&#39;&amp;nbsp&#39;</span><span class="o">*</span><span class="n">indent</span><span class="o">*</span><span class="mi">6</span><span class="si">}{</span><span class="n">key</span><span class="si">}</span><span class="s2">&lt;/td&gt;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="n">dictToHTML</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">from_top</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&lt;td&gt;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&lt;/td&gt;&quot;</span>
+            <span class="n">html</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;&lt;/tr&gt;&quot;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    
+    <span class="k">if</span> <span class="n">from_top</span><span class="p">:</span>
+        <span class="n">html</span> <span class="o">+=</span> <span class="sa">r</span><span class="s2">&quot;&lt;/table&gt;&quot;</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+
+    <span class="k">return</span> <span class="n">html</span></div>
+
+
+<div class="viewcode-block" id="toTable">
+<a class="viewcode-back" href="../../InterpolatingEFT.html#InterpolatingEFT.toTable.toTable">[docs]</a>
+<span class="k">def</span> <span class="nf">toTable</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts a .yaml file to a html table</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file (str): The path to the file</span>
+<span class="sd">        name (str): The name of the output directory</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">yaml_file</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">yaml_data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">yaml_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yaml_data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">html_table</span> <span class="o">=</span> <span class="n">dictToHTML</span><span class="p">(</span><span class="n">yaml_data</span><span class="p">)</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;config.html&quot;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">html_file</span><span class="p">:</span>
+                    <span class="n">html_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">wrapper</span><span class="o">+</span><span class="n">html_table</span><span class="o">+</span><span class="s2">&quot;&lt;/div&gt;&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HTML table generated successfully.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid YAML format. Please provide a dictionary.&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">yaml</span><span class="o">.</span><span class="n">YAMLError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error reading YAML file: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tom Runting.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

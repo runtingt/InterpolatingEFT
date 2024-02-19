@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InterpolatingEFT package &mdash; InterpolatingEFT v3.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5773a0da"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="InterpolatingEFT" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            InterpolatingEFT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">InterpolatingEFT</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">InterpolatingEFT package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT.dataLoader">InterpolatingEFT.dataLoader module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset"><code class="docutils literal notranslate"><span class="pre">NLLDataset</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.dataLoader.loadData"><code class="docutils literal notranslate"><span class="pre">loadData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.dataLoader.toTorch"><code class="docutils literal notranslate"><span class="pre">toTorch()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT.dataSplitter">InterpolatingEFT.dataSplitter module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.dataSplitter.GridSplitter"><code class="docutils literal notranslate"><span class="pre">GridSplitter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.dataSplitter.RandomSplitter"><code class="docutils literal notranslate"><span class="pre">RandomSplitter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.dataSplitter.Splitter"><code class="docutils literal notranslate"><span class="pre">Splitter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.dataSplitter.loadAndSplit"><code class="docutils literal notranslate"><span class="pre">loadAndSplit()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT.interpolator">InterpolatingEFT.interpolator module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.interpolator.Combine1D"><code class="docutils literal notranslate"><span class="pre">Combine1D</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.interpolator.Combine2D"><code class="docutils literal notranslate"><span class="pre">Combine2D</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.interpolator.Interpolator"><code class="docutils literal notranslate"><span class="pre">Interpolator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.interpolator.rbfInterpolator"><code class="docutils literal notranslate"><span class="pre">rbfInterpolator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT.logger">InterpolatingEFT.logger module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.logger.TqdmToLogger"><code class="docutils literal notranslate"><span class="pre">TqdmToLogger</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT.main">InterpolatingEFT.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT.plotter">InterpolatingEFT.plotter module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.plotter.plot1D"><code class="docutils literal notranslate"><span class="pre">plot1D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.plotter.plot2D"><code class="docutils literal notranslate"><span class="pre">plot2D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.plotter.plotAll1D"><code class="docutils literal notranslate"><span class="pre">plotAll1D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.plotter.plotAll2D"><code class="docutils literal notranslate"><span class="pre">plotAll2D()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT.profiler">InterpolatingEFT.profiler module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.profiler.profile1D"><code class="docutils literal notranslate"><span class="pre">profile1D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.profiler.profile2D"><code class="docutils literal notranslate"><span class="pre">profile2D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.profiler.profileAll1D"><code class="docutils literal notranslate"><span class="pre">profileAll1D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.profiler.profileAll2D"><code class="docutils literal notranslate"><span class="pre">profileAll2D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.profiler.profileCombine"><code class="docutils literal notranslate"><span class="pre">profileCombine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.profiler.profileCombine1D"><code class="docutils literal notranslate"><span class="pre">profileCombine1D()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.profiler.profileCombine2D"><code class="docutils literal notranslate"><span class="pre">profileCombine2D()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT.rbfSplineFast">InterpolatingEFT.rbfSplineFast module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast"><code class="docutils literal notranslate"><span class="pre">rbfSplineFast</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT.toTable">InterpolatingEFT.toTable module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.toTable.dictToHTML"><code class="docutils literal notranslate"><span class="pre">dictToHTML()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.toTable.toTable"><code class="docutils literal notranslate"><span class="pre">toTable()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT.utils">InterpolatingEFT.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.utils.Accessories"><code class="docutils literal notranslate"><span class="pre">Accessories</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.utils.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.utils.Data"><code class="docutils literal notranslate"><span class="pre">Data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.utils.LearningRate"><code class="docutils literal notranslate"><span class="pre">LearningRate</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.utils.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.utils.Training"><code class="docutils literal notranslate"><span class="pre">Training</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#InterpolatingEFT.utils.loadConfig"><code class="docutils literal notranslate"><span class="pre">loadConfig()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-InterpolatingEFT">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">InterpolatingEFT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">InterpolatingEFT</a></li>
+      <li class="breadcrumb-item active">InterpolatingEFT package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/InterpolatingEFT.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="interpolatingeft-package">
+<h1>InterpolatingEFT package<a class="headerlink" href="#interpolatingeft-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-InterpolatingEFT.dataLoader">
+<span id="interpolatingeft-dataloader-module"></span><h2>InterpolatingEFT.dataLoader module<a class="headerlink" href="#module-InterpolatingEFT.dataLoader" title="Link to this heading"></a></h2>
+<p>Loads data from .ROOT files into a custom torch dataset</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataLoader.NLLDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.dataLoader.</span></span><span class="sig-name descname"><span class="pre">NLLDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">POIs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/dataLoader.html#NLLDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataLoader.NLLDataset" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">Any</span></code>]</p>
+<p>Torch-compatible dataset for the NLL data</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataLoader.NLLDataset.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset"><span class="pre">NLLDataset</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/dataLoader.html#NLLDataset.append"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataLoader.NLLDataset.append" title="Link to this definition"></a></dt>
+<dd><p>Appends a new dataset to the end of this dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>new</strong> (<a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset"><em>NLLDataset</em></a>) – The dataset to append</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Raised if the datasets have different coefficients</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataLoader.NLLDataset.toFrame">
+<span class="sig-name descname"><span class="pre">toFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/dataLoader.html#NLLDataset.toFrame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataLoader.NLLDataset.toFrame" title="Link to this definition"></a></dt>
+<dd><p>Converts a NLLDataset to a dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The dataset as a dataframe</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataLoader.loadData">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.dataLoader.</span></span><span class="sig-name descname"><span class="pre">loadData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">POIs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_best</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/dataLoader.html#loadData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataLoader.loadData" title="Link to this definition"></a></dt>
+<dd><p>Loads the data from a ROOT file into a pandas dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – The path to the file to load</p></li>
+<li><p><strong>POIs</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The pois to load the scans for</p></li>
+<li><p><strong>include_best</strong> (<em>bool</em>) – Include the best-fit point. Defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The data as a dataframe with a column for each WC</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataLoader.toTorch">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.dataLoader.</span></span><span class="sig-name descname"><span class="pre">toTorch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">POIs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_best</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/dataLoader.html#toTorch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataLoader.toTorch" title="Link to this definition"></a></dt>
+<dd><p>Convert data from a ROOT file into torch datasets for input and
+target data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – The path to the file to load</p></li>
+<li><p><strong>POIs</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The pois to load the scans for</p></li>
+<li><p><strong>include_best</strong> (<em>bool</em>) – Include the best-fit point. Defaults to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The input and target torch tensors in a list.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[torch.Tensor]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-InterpolatingEFT.dataSplitter">
+<span id="interpolatingeft-datasplitter-module"></span><h2>InterpolatingEFT.dataSplitter module<a class="headerlink" href="#module-InterpolatingEFT.dataSplitter" title="Link to this heading"></a></h2>
+<p>Splits the dataset int testing and training data, either randomly or uniformly
+across a grid</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataSplitter.GridSplitter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.dataSplitter.</span></span><span class="sig-name descname"><span class="pre">GridSplitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset"><span class="pre">NLLDataset</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/dataSplitter.html#GridSplitter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataSplitter.GridSplitter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#InterpolatingEFT.dataSplitter.Splitter" title="InterpolatingEFT.dataSplitter.Splitter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Splitter</span></code></a></p>
+<p>Splits the dataset uniuformly across a grid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Splitter</strong> (<a class="reference internal" href="#InterpolatingEFT.dataSplitter.Splitter" title="InterpolatingEFT.dataSplitter.Splitter"><em>Splitter</em></a>) – Abstract base splitter class</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataSplitter.GridSplitter.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Subset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset"><span class="pre">NLLDataset</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/dataSplitter.html#GridSplitter.split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataSplitter.GridSplitter.split" title="Link to this definition"></a></dt>
+<dd><p>Split the dataset, reserving a fraction train_split for training</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>train_split</strong> (<em>float</em>) – The fraction of data for training</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The training and test datasets as subsets</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Subset]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataSplitter.RandomSplitter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.dataSplitter.</span></span><span class="sig-name descname"><span class="pre">RandomSplitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset"><span class="pre">NLLDataset</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/dataSplitter.html#RandomSplitter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataSplitter.RandomSplitter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#InterpolatingEFT.dataSplitter.Splitter" title="InterpolatingEFT.dataSplitter.Splitter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Splitter</span></code></a></p>
+<p>Splits the dataset randomly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Splitter</strong> (<a class="reference internal" href="#InterpolatingEFT.dataSplitter.Splitter" title="InterpolatingEFT.dataSplitter.Splitter"><em>Splitter</em></a>) – Abstract base splitter class</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataSplitter.RandomSplitter.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Subset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset"><span class="pre">NLLDataset</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/dataSplitter.html#RandomSplitter.split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataSplitter.RandomSplitter.split" title="Link to this definition"></a></dt>
+<dd><p>Split the dataset, reserving a fraction train_split for training</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>train_split</strong> (<em>float</em>) – The fraction of data for training</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The training and test datasets as subsets</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Subset]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataSplitter.Splitter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.dataSplitter.</span></span><span class="sig-name descname"><span class="pre">Splitter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset"><span class="pre">NLLDataset</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/dataSplitter.html#Splitter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataSplitter.Splitter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class for a generic data splitter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ABC</strong> (<em>ABC</em>) – Helper class for abstract base classes</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataSplitter.Splitter.split">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Subset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset"><span class="pre">NLLDataset</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/dataSplitter.html#Splitter.split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataSplitter.Splitter.split" title="Link to this definition"></a></dt>
+<dd><p>Split the dataset, reserving a fraction train_split for training</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>train_split</strong> (<em>float</em>) – The fraction of data for training</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The training and test datasets as subsets</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[Subset]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.dataSplitter.loadAndSplit">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.dataSplitter.</span></span><span class="sig-name descname"><span class="pre">loadAndSplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><span class="pre">Data</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_best</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Subset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset"><span class="pre">NLLDataset</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Subset</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset"><span class="pre">NLLDataset</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/dataSplitter.html#loadAndSplit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.dataSplitter.loadAndSplit" title="Link to this definition"></a></dt>
+<dd><p>Loads the dataset as a train/test split</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – The file to load the dataset from</p></li>
+<li><p><strong>data_config</strong> (<a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><em>Data</em></a>) – Options for the data</p></li>
+<li><p><strong>split</strong> (<em>float</em>) – The train fraction</p></li>
+<li><p><strong>include_best</strong> (<em>bool</em><em>, </em><em>optional</em>) – Include the best fit point.            Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – Raised if an option other than ‘grid’ is specified</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The train/test split</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple[Subset[<a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset">NLLDataset</a>], Subset[<a class="reference internal" href="#InterpolatingEFT.dataLoader.NLLDataset" title="InterpolatingEFT.dataLoader.NLLDataset">NLLDataset</a>]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-InterpolatingEFT.interpolator">
+<span id="interpolatingeft-interpolator-module"></span><h2>InterpolatingEFT.interpolator module<a class="headerlink" href="#module-InterpolatingEFT.interpolator" title="Link to this heading"></a></h2>
+<p>Class definitions for interpolators</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.interpolator.Combine1D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.interpolator.</span></span><span class="sig-name descname"><span class="pre">Combine1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><span class="pre">Data</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">poi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/interpolator.html#Combine1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.interpolator.Combine1D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Holds the data for the 1D scans from Combine</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.interpolator.Combine2D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.interpolator.</span></span><span class="sig-name descname"><span class="pre">Combine2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/interpolator.html#Combine2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.interpolator.Combine2D" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Holds the data for the 1D scans from Combine</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.interpolator.Interpolator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.interpolator.</span></span><span class="sig-name descname"><span class="pre">Interpolator</span></span><a class="reference internal" href="_modules/InterpolatingEFT/interpolator.html#Interpolator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.interpolator.Interpolator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract base class for a generic interpolator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ABC</strong> (<em>ABC</em>) – Helper class for abstract base classes</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.interpolator.Interpolator.evaluate">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/interpolator.html#Interpolator.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.interpolator.Interpolator.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates the interpolator at a specified point</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>point</strong> (<em>Any</em>) – The point to evaluate at</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output of the interpolator at that point</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.interpolator.Interpolator.initialise">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">initialise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><span class="pre">Data</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/interpolator.html#Interpolator.initialise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.interpolator.Interpolator.initialise" title="Link to this definition"></a></dt>
+<dd><p>Loads data and computes weights for the interpolator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data_config</strong> (<a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><em>Data</em></a>) – Options for the data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.interpolator.Interpolator.minimize">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">free_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_vals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">OptimizeResult</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/interpolator.html#Interpolator.minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.interpolator.Interpolator.minimize" title="Link to this definition"></a></dt>
+<dd><p>Minimize the interpolator using SciPy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>free_keys</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The keys to minimise over</p></li>
+<li><p><strong>fixed_vals</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>float</em><em>]</em><em>]</em>) – The fixed values in the fit</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of optimising</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>OptimizeResult</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.interpolator.rbfInterpolator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.interpolator.</span></span><span class="sig-name descname"><span class="pre">rbfInterpolator</span></span><a class="reference internal" href="_modules/InterpolatingEFT/interpolator.html#rbfInterpolator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.interpolator.rbfInterpolator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#InterpolatingEFT.interpolator.Interpolator" title="InterpolatingEFT.interpolator.Interpolator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Interpolator</span></code></a></p>
+<p>Interpolates a surface using radial basis functions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Interpolator</strong> (<a class="reference internal" href="#InterpolatingEFT.interpolator.Interpolator" title="InterpolatingEFT.interpolator.Interpolator"><em>Interpolator</em></a>) – The abstract base class</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.interpolator.rbfInterpolator.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/interpolator.html#rbfInterpolator.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.interpolator.rbfInterpolator.evaluate" title="Link to this definition"></a></dt>
+<dd><p>Evaluates the interpolator at a specified point</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>point</strong> (<em>Any</em>) – The point to evaluate at</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The output of the interpolator at that point</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.interpolator.rbfInterpolator.initialise">
+<span class="sig-name descname"><span class="pre">initialise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><span class="pre">Data</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/interpolator.html#rbfInterpolator.initialise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.interpolator.rbfInterpolator.initialise" title="Link to this definition"></a></dt>
+<dd><p>Loads data and computes weights for the interpolator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data_config</strong> (<a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><em>Data</em></a>) – Options for the data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.interpolator.rbfInterpolator.minimize">
+<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">free_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_vals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">OptimizeResult</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/interpolator.html#rbfInterpolator.minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.interpolator.rbfInterpolator.minimize" title="Link to this definition"></a></dt>
+<dd><p>Minimize the interpolator using SciPy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>free_keys</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – The keys to minimise over</p></li>
+<li><p><strong>fixed_vals</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>List</em><em>[</em><em>float</em><em>]</em><em>]</em>) – The fixed values in the fit</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The result of optimising</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>OptimizeResult</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-InterpolatingEFT.logger">
+<span id="interpolatingeft-logger-module"></span><h2>InterpolatingEFT.logger module<a class="headerlink" href="#module-InterpolatingEFT.logger" title="Link to this heading"></a></h2>
+<p>Handles logging tqdm output to file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.logger.TqdmToLogger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.logger.</span></span><span class="sig-name descname"><span class="pre">TqdmToLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">RootLogger</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/logger.html#TqdmToLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.logger.TqdmToLogger" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">StringIO</span></code></p>
+<p>Output stream for TQDM which will output to logger module instead of
+the StdOut.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.logger.TqdmToLogger.buf">
+<span class="sig-name descname"><span class="pre">buf</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#InterpolatingEFT.logger.TqdmToLogger.buf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.logger.TqdmToLogger.flush">
+<span class="sig-name descname"><span class="pre">flush</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/logger.html#TqdmToLogger.flush"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.logger.TqdmToLogger.flush" title="Link to this definition"></a></dt>
+<dd><p>Flush the stream</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.logger.TqdmToLogger.level">
+<span class="sig-name descname"><span class="pre">level</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#InterpolatingEFT.logger.TqdmToLogger.level" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.logger.TqdmToLogger.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#InterpolatingEFT.logger.TqdmToLogger.logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.logger.TqdmToLogger.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/logger.html#TqdmToLogger.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.logger.TqdmToLogger.write" title="Link to this definition"></a></dt>
+<dd><p>Write to the buffer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>buf</strong> (<em>str</em>) – The buffer to write to</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-InterpolatingEFT.main">
+<span id="interpolatingeft-main-module"></span><h2>InterpolatingEFT.main module<a class="headerlink" href="#module-InterpolatingEFT.main" title="Link to this heading"></a></h2>
+<p>Runs the script</p>
+</section>
+<section id="module-InterpolatingEFT.plotter">
+<span id="interpolatingeft-plotter-module"></span><h2>InterpolatingEFT.plotter module<a class="headerlink" href="#module-InterpolatingEFT.plotter" title="Link to this heading"></a></h2>
+<p>Plots all profiled fits</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.plotter.plot1D">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.plotter.</span></span><span class="sig-name descname"><span class="pre">plot1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'out/default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/plotter.html#plot1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.plotter.plot1D" title="Link to this definition"></a></dt>
+<dd><p>Plot the 1D scan for the specified POI</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poi</strong> (<em>str</em>) – The poi to plot</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – The legend entry</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The output dir. Defaults to ‘out/default’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.plotter.plot2D">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.plotter.</span></span><span class="sig-name descname"><span class="pre">plot2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'out/default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/plotter.html#plot2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.plotter.plot2D" title="Link to this definition"></a></dt>
+<dd><p>Plots the 2D scan for the specified POI pair</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pair</strong> (<em>str</em>) – The pair to plot</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – The legend entry</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The output dir. Defaults to ‘out/default’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.plotter.plotAll1D">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.plotter.</span></span><span class="sig-name descname"><span class="pre">plotAll1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pois</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'out/default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/plotter.html#plotAll1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.plotter.plotAll1D" title="Link to this definition"></a></dt>
+<dd><p>Plots the 1D scan for the specified POIs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>poi</strong> (<em>str</em>) – The pois to plot</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – The legend entries</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The output dir. Defaults to ‘out/default’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.plotter.plotAll2D">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.plotter.</span></span><span class="sig-name descname"><span class="pre">plotAll2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pois</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'out/default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/plotter.html#plotAll2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.plotter.plotAll2D" title="Link to this definition"></a></dt>
+<dd><p>Plots the 2D scan for the specified POI pairs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pois</strong> (<em>str</em>) – The pois to plot, pairwise</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – The legend entries</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The output dir. Defaults to ‘out/default’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-InterpolatingEFT.profiler">
+<span id="interpolatingeft-profiler-module"></span><h2>InterpolatingEFT.profiler module<a class="headerlink" href="#module-InterpolatingEFT.profiler" title="Link to this heading"></a></h2>
+<p>Makes all profiled 1D and 2D scans</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.profiler.profile1D">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.profiler.</span></span><span class="sig-name descname"><span class="pre">profile1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.interpolator.rbfInterpolator" title="InterpolatingEFT.interpolator.rbfInterpolator"><span class="pre">rbfInterpolator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">poi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'out/default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/profiler.html#profile1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.profiler.profile1D" title="Link to this definition"></a></dt>
+<dd><p>Get the 1D profiled scan for the specified POI, using an interpolator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interp</strong> (<a class="reference internal" href="#InterpolatingEFT.interpolator.rbfInterpolator" title="InterpolatingEFT.interpolator.rbfInterpolator"><em>rbfInterpolator</em></a>) – The interpolator to use</p></li>
+<li><p><strong>poi</strong> (<em>str</em>) – The poi to scan</p></li>
+<li><p><strong>num</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of scan points. Defaults to 50.</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The out dir. Defaults to ‘out/default’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.profiler.profile2D">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.profiler.</span></span><span class="sig-name descname"><span class="pre">profile2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.interpolator.rbfInterpolator" title="InterpolatingEFT.interpolator.rbfInterpolator"><span class="pre">rbfInterpolator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pois</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/profiler.html#profile2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.profiler.profile2D" title="Link to this definition"></a></dt>
+<dd><p>Get the 2D pairwise profiled scan for the pois specified,         using an interpolator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interp</strong> (<a class="reference internal" href="#InterpolatingEFT.interpolator.rbfInterpolator" title="InterpolatingEFT.interpolator.rbfInterpolator"><em>rbfInterpolator</em></a>) – The interpolator to use</p></li>
+<li><p><strong>num</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of scan points. Defaults to 50.</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The out dir. Defaults to ‘out/default’.</p></li>
+<li><p><strong>pois</strong> (<em>str</em>) – The poi pair to scan</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.profiler.profileAll1D">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.profiler.</span></span><span class="sig-name descname"><span class="pre">profileAll1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.interpolator.rbfInterpolator" title="InterpolatingEFT.interpolator.rbfInterpolator"><span class="pre">rbfInterpolator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pois</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'out/default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/profiler.html#profileAll1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.profiler.profileAll1D" title="Link to this definition"></a></dt>
+<dd><p>Get the 1D profiled scan for all POIs, using an interpolator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interp</strong> (<a class="reference internal" href="#InterpolatingEFT.interpolator.rbfInterpolator" title="InterpolatingEFT.interpolator.rbfInterpolator"><em>rbfInterpolator</em></a>) – The interpolator to use</p></li>
+<li><p><strong>pois</strong> (<em>str</em>) – The pois to scan</p></li>
+<li><p><strong>num</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of scan points. Defaults to 50.</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The out dir. Defaults to ‘out/default’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.profiler.profileAll2D">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.profiler.</span></span><span class="sig-name descname"><span class="pre">profileAll2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.interpolator.rbfInterpolator" title="InterpolatingEFT.interpolator.rbfInterpolator"><span class="pre">rbfInterpolator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pois</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'out/default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/profiler.html#profileAll2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.profiler.profileAll2D" title="Link to this definition"></a></dt>
+<dd><p>Get the 2D pairwise profiled scan for all POIs, using an interpolator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interp</strong> (<a class="reference internal" href="#InterpolatingEFT.interpolator.rbfInterpolator" title="InterpolatingEFT.interpolator.rbfInterpolator"><em>rbfInterpolator</em></a>) – The interpolator to use</p></li>
+<li><p><strong>pois</strong> (<em>str</em>) – The pois to scan</p></li>
+<li><p><strong>num</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of scan points. Defaults to 50.</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The out dir. Defaults to ‘out/default’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.profiler.profileCombine">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.profiler.</span></span><span class="sig-name descname"><span class="pre">profileCombine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><span class="pre">Data</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'out/default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/profiler.html#profileCombine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.profiler.profileCombine" title="Link to this definition"></a></dt>
+<dd><p>Extracts the data from the 1D and 2D Combine scans</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_config</strong> (<a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><em>Data</em></a>) – Options for the data</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The out dir. Defaults to ‘out/default’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.profiler.profileCombine1D">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.profiler.</span></span><span class="sig-name descname"><span class="pre">profileCombine1D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><span class="pre">Data</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'out/default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/profiler.html#profileCombine1D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.profiler.profileCombine1D" title="Link to this definition"></a></dt>
+<dd><p>Extracts the data from the 1D Combine scans for all POIs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_config</strong> (<a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><em>Data</em></a>) – Options for the data</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The out dir. Defaults to ‘out/default’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.profiler.profileCombine2D">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.profiler.</span></span><span class="sig-name descname"><span class="pre">profileCombine2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><span class="pre">Data</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'out/default'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/profiler.html#profileCombine2D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.profiler.profileCombine2D" title="Link to this definition"></a></dt>
+<dd><p>Extracts the data from the 2D pairwise Combine scans for all POIs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_config</strong> (<a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><em>Data</em></a>) – Options for the data</p></li>
+<li><p><strong>out</strong> (<em>str</em><em>, </em><em>optional</em>) – The out dir. Defaults to ‘out/default’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-InterpolatingEFT.rbfSplineFast">
+<span id="interpolatingeft-rbfsplinefast-module"></span><h2>InterpolatingEFT.rbfSplineFast module<a class="headerlink" href="#module-InterpolatingEFT.rbfSplineFast" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.rbfSplineFast.</span></span><span class="sig-name descname"><span class="pre">rbfSplineFast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.calculateWeights">
+<span class="sig-name descname"><span class="pre">calculateWeights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.calculateWeights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.calculateWeights" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.diff2">
+<span class="sig-name descname"><span class="pre">diff2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.diff2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.diff2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.evaluate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.evaluate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.getDistFromSquare">
+<span class="sig-name descname"><span class="pre">getDistFromSquare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.getDistFromSquare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.getDistFromSquare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.getDistSquare">
+<span class="sig-name descname"><span class="pre">getDistSquare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">col</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.getDistSquare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.getDistSquare" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.getRadialArg">
+<span class="sig-name descname"><span class="pre">getRadialArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.getRadialArg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.getRadialArg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.initialise">
+<span class="sig-name descname"><span class="pre">initialise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radial_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gaussian'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rescaleAxis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.initialise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.initialise" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.radialCubic">
+<span class="sig-name descname"><span class="pre">radialCubic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.radialCubic"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.radialCubic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.radialGauss">
+<span class="sig-name descname"><span class="pre">radialGauss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.radialGauss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.radialGauss" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.radialInverseMultiQuad">
+<span class="sig-name descname"><span class="pre">radialInverseMultiQuad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.radialInverseMultiQuad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.radialInverseMultiQuad" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="InterpolatingEFT.rbfSplineFast.rbfSplineFast.radialMultiQuad">
+<span class="sig-name descname"><span class="pre">radialMultiQuad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/InterpolatingEFT/rbfSplineFast.html#rbfSplineFast.radialMultiQuad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.rbfSplineFast.rbfSplineFast.radialMultiQuad" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-InterpolatingEFT.toTable">
+<span id="interpolatingeft-totable-module"></span><h2>InterpolatingEFT.toTable module<a class="headerlink" href="#module-InterpolatingEFT.toTable" title="Link to this heading"></a></h2>
+<p>Converts a .yaml file to a html table</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.toTable.dictToHTML">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.toTable.</span></span><span class="sig-name descname"><span class="pre">dictToHTML</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_top</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/toTable.html#dictToHTML"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.toTable.dictToHTML" title="Link to this definition"></a></dt>
+<dd><p>Converts a dictionary to html</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The data to convert</p></li>
+<li><p><strong>indent</strong> (<em>int</em><em>, </em><em>optional</em>) – The indent level. Defaults to 0.</p></li>
+<li><p><strong>from_top</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether the calling function had a zero indent.            Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The dictionary as html</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.toTable.toTable">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.toTable.</span></span><span class="sig-name descname"><span class="pre">toTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/InterpolatingEFT/toTable.html#toTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.toTable.toTable" title="Link to this definition"></a></dt>
+<dd><p>Converts a .yaml file to a html table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – The path to the file</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the output directory</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-InterpolatingEFT.utils">
+<span id="interpolatingeft-utils-module"></span><h2>InterpolatingEFT.utils module<a class="headerlink" href="#module-InterpolatingEFT.utils" title="Link to this heading"></a></h2>
+<p>Utilities for handling model configurations</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Accessories">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.utils.</span></span><span class="sig-name descname"><span class="pre">Accessories</span></span><a class="reference internal" href="_modules/InterpolatingEFT/utils.html#Accessories"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.utils.Accessories" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Format of the model accessories</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypedDict</strong> (<em>TypedDict</em>) – Base class for TypedDict</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Accessories.loss_fn">
+<span class="sig-name descname"><span class="pre">loss_fn</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tensor</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#InterpolatingEFT.utils.Accessories.loss_fn" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Accessories.optim">
+<span class="sig-name descname"><span class="pre">optim</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Adam</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Accessories.optim" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Accessories.sched">
+<span class="sig-name descname"><span class="pre">sched</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ReduceLROnPlateau</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Accessories.sched" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.utils.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="_modules/InterpolatingEFT/utils.html#Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.utils.Config" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>The configuration format</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypedDict</strong> (<em>TypedDict</em>) – Base class for TypedDict</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Config.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#InterpolatingEFT.utils.Data" title="InterpolatingEFT.utils.Data"><span class="pre">Data</span></a></em><a class="headerlink" href="#InterpolatingEFT.utils.Config.data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Config.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#InterpolatingEFT.utils.Model" title="InterpolatingEFT.utils.Model"><span class="pre">Model</span></a></em><a class="headerlink" href="#InterpolatingEFT.utils.Config.model" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Config.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#InterpolatingEFT.utils.Training" title="InterpolatingEFT.utils.Training"><span class="pre">Training</span></a></em><a class="headerlink" href="#InterpolatingEFT.utils.Config.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Data">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.utils.</span></span><span class="sig-name descname"><span class="pre">Data</span></span><a class="reference internal" href="_modules/InterpolatingEFT/utils.html#Data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.utils.Data" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Options for the data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypedDict</strong> (<em>TypedDict</em>) – Base class for TypedDict</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Data.POIs">
+<span class="sig-name descname"><span class="pre">POIs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#InterpolatingEFT.utils.Data.POIs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Data.attribute">
+<span class="sig-name descname"><span class="pre">attribute</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Data.attribute" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Data.channel">
+<span class="sig-name descname"><span class="pre">channel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Data.channel" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Data.fraction">
+<span class="sig-name descname"><span class="pre">fraction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Data.fraction" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Data.interpolator">
+<span class="sig-name descname"><span class="pre">interpolator</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#InterpolatingEFT.utils.Data.interpolator" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Data.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Data.model" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Data.splitting">
+<span class="sig-name descname"><span class="pre">splitting</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Data.splitting" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Data.subtractbest">
+<span class="sig-name descname"><span class="pre">subtractbest</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Data.subtractbest" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Data.type">
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Data.type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.LearningRate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.utils.</span></span><span class="sig-name descname"><span class="pre">LearningRate</span></span><a class="reference internal" href="_modules/InterpolatingEFT/utils.html#LearningRate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.utils.LearningRate" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Options for the learning rate</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypedDict</strong> (<em>TypedDict</em>) – Base class for TypedDict</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.LearningRate.decay">
+<span class="sig-name descname"><span class="pre">decay</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#InterpolatingEFT.utils.LearningRate.decay" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.LearningRate.initial">
+<span class="sig-name descname"><span class="pre">initial</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#InterpolatingEFT.utils.LearningRate.initial" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.LearningRate.patience">
+<span class="sig-name descname"><span class="pre">patience</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#InterpolatingEFT.utils.LearningRate.patience" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Model">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.utils.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><a class="reference internal" href="_modules/InterpolatingEFT/utils.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.utils.Model" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Options for the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypedDict</strong> (<em>TypedDict</em>) – Base class for TypedDict</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Model.activation">
+<span class="sig-name descname"><span class="pre">activation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Model.activation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Training">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.utils.</span></span><span class="sig-name descname"><span class="pre">Training</span></span><a class="reference internal" href="_modules/InterpolatingEFT/utils.html#Training"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.utils.Training" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>Options for training</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>TypedDict</strong> (<em>TypedDict</em>) – Base class for TypedDict</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Training.batchsize">
+<span class="sig-name descname"><span class="pre">batchsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Training.batchsize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Training.epochs">
+<span class="sig-name descname"><span class="pre">epochs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Training.epochs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Training.learningrate">
+<span class="sig-name descname"><span class="pre">learningrate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#InterpolatingEFT.utils.LearningRate" title="InterpolatingEFT.utils.LearningRate"><span class="pre">LearningRate</span></a></em><a class="headerlink" href="#InterpolatingEFT.utils.Training.learningrate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Training.seedmax">
+<span class="sig-name descname"><span class="pre">seedmax</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Training.seedmax" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Training.seedmin">
+<span class="sig-name descname"><span class="pre">seedmin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Training.seedmin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.Training.temperature">
+<span class="sig-name descname"><span class="pre">temperature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#InterpolatingEFT.utils.Training.temperature" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="InterpolatingEFT.utils.loadConfig">
+<span class="sig-prename descclassname"><span class="pre">InterpolatingEFT.utils.</span></span><span class="sig-name descname"><span class="pre">loadConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#InterpolatingEFT.utils.Config" title="InterpolatingEFT.utils.Config"><span class="pre">Config</span></a></span></span><a class="reference internal" href="_modules/InterpolatingEFT/utils.html#loadConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#InterpolatingEFT.utils.loadConfig" title="Link to this definition"></a></dt>
+<dd><p>Loads a configuation file into a Config object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – The path to the config file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The configuration options</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#InterpolatingEFT.utils.Config" title="InterpolatingEFT.utils.Config">Config</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-InterpolatingEFT">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-InterpolatingEFT" title="Link to this heading"></a></h2>
+<p>init file for module</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="InterpolatingEFT" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Tom Runting.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
