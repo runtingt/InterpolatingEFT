@@ -6,7 +6,6 @@ import os
 import pandas as pd
 import numpy as np
 import uproot
-from copy import deepcopy
 from typing import Any, Dict, List
 from abc import ABC, abstractmethod
 from InterpolatingEFT.utils import Data
@@ -29,7 +28,7 @@ class Combine1D:
         self.data_1d = loadData(
             os.path.join(os.path.abspath(self.data_dir), 
                          f"{self.stem}{poi}.root"),
-            [poi], include_best=True)
+            list(data_config["POIs"].keys()), include_best=True)
         
 class Combine2D:
     """
@@ -128,21 +127,24 @@ class rbfInterpolator(Interpolator):
         self.stem = (f"scan.{data_config['channel']}.{data_config['model']}." +
                      f"{data_config['type']}.{data_config['attribute']}.")
             
-        # Get a subset as a dataframe
-        data, _ = loadAndSplit(
+        # Get a splits as dataframes
+        datasets = [] 
+        data_train, data_test  = loadAndSplit(
             os.path.join(os.path.abspath(self.data_dir), 
                          f"{self.stem}{'_'.join(self.pois)}.root"), 
             data_config, include_best=True,
             split=data_config["fraction"])
-        assert isinstance(data.dataset, NLLDataset)
-        data_tup = data.dataset[list(data.indices)]
-        data_rbf = NLLDataset(*data_tup, data.dataset.POIs)
-        self.best = data_rbf.X[np.argmin(data_rbf.Y)].detach().numpy()
-        self.data = data_rbf.toFrame()
+        for data in [data_train, data_test]:
+            assert isinstance(data.dataset, NLLDataset)
+            data_tup = data.dataset[list(data.indices)]
+            datasets.append(NLLDataset(*data_tup, data.dataset.POIs))
+        self.best = datasets[0].X[np.argmin(datasets[0].Y)].detach().numpy()
+        self.data_train = datasets[0].toFrame()
+        self.data_test = datasets[1].toFrame()
         
         # Build interpolator
-        self.spline = rbfSplineFast(len(self.data.columns)-1)
-        self.spline.initialise(self.data, "deltaNLL", radial_func="cubic",
+        self.spline = rbfSplineFast(len(self.data_train.columns)-1)
+        self.spline.initialise(self.data_train, "deltaNLL", radial_func="cubic",
                                eps=data_config['interpolator']['eps'],
                                rescaleAxis=True)
         
@@ -175,17 +177,17 @@ class rbfInterpolator(Interpolator):
         super().minimize(free_keys, fixed_vals)
             
         # Create a blank df
-        d = {poi: [np.nan] for poi in self.pois}
+        d = {poi: np.nan for poi in self.pois}
         
         # Fill in the free values
         for key, coeff in zip(free_keys, coeffs):
-            d[key] = [coeff]
+            d[key] = coeff
         
         # Fill in the fixed values
         for key, val in fixed_vals.items():
-            d[key] = val
-        
-        return self.evaluate(pd.DataFrame(d))
+            d[key] = val[0]
+
+        return self.evaluate(pd.DataFrame([d]))
     
     def minimize(self, free_keys: List[str], 
                  fixed_vals: Dict[str, List[float]]) -> OptimizeResult:
@@ -202,7 +204,7 @@ class rbfInterpolator(Interpolator):
         super().minimize(free_keys, fixed_vals)
         assert (len(free_keys) + len(fixed_vals)) == len(self.pois)
         
-        #  Get start point and bounds for free POIs
+        # Get start point and bounds for free POIs
         start = []
         bounds = []
         for key in free_keys:

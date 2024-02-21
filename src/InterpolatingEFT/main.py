@@ -8,7 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from InterpolatingEFT.interpolator import rbfInterpolator
 from InterpolatingEFT.profiler import profileCombine, profileAll1D, profileAll2D
-from InterpolatingEFT.plotter import plotAll1D, plotAll2D
+from InterpolatingEFT.plotter import plotAllScan1D, plotAllScan2D, plotAllDiff1D
 from InterpolatingEFT.utils import loadConfig
 from InterpolatingEFT.toTable import toTable
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     profileCombine(config["data"], out=outdir)
     print("Done!")
     if config["data"]["interpolator"]["mode"] == "RBF":
-        print("Initialsing RBF...")
+        print("Initialising RBF...")
         interp = rbfInterpolator()
         interp.initialise(config["data"])
         print("Done!")
@@ -48,13 +48,16 @@ if __name__ == "__main__":
         print("Done!")        
         
         # Plot
-        print("Plotting...")
-        plotAll1D(interp.pois, 
-                  [f"rbfSpline({len(interp.data)})"]*len(interp.pois),
-                  out=outdir)
-        plotAll2D(interp.pois, 
-                  [f"rbfSpline({len(interp.data)})"]*len(interp.pois),
-                  out=outdir)
+        print("Plotting profiled plots...")
+        plotAllScan1D(interp.pois, 
+                      [f"rbfSpline({len(interp.data_train)})"]*len(interp.pois),
+                      out=outdir)
+        plotAllScan2D(interp.pois, 
+                      [f"rbfSpline({len(interp.data_train)})"]*len(interp.pois),
+                      out=outdir)
+        print("Done!")
+        print("Plotting difference plots...")
+        plotAllDiff1D(interp, config["data"], out=outdir)
         print("Done!")
     else:
         raise NotImplementedError("Only RBF is implemented")

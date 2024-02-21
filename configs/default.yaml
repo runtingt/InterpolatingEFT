@@ -15,6 +15,6 @@ data:
     mode: "RBF"
     eps: 0.2
   splitting: "grid"
-  fraction: 0.50
+  fraction: 0.25
   subtractbest: False
 ...
