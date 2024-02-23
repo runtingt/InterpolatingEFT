@@ -25,7 +25,7 @@ class Combine1D:
         self.data_dir = 'data'
         self.stem = (f"scan.{data_config['channel']}.{data_config['model']}." +
                      f"{data_config['type']}.{data_config['attribute']}.")
-        self.data_1d = loadData(
+        self.data = loadData(
             os.path.join(os.path.abspath(self.data_dir), 
                          f"{self.stem}{poi}.root"),
             list(data_config["POIs"].keys()), include_best=True)
@@ -34,16 +34,26 @@ class Combine2D:
     """
     Holds the data for the 1D scans from Combine
     """
-    def __init__(self, pair_name: str) -> None:
+    def __init__(self, data_config: Data, pair_name: str) -> None:
         """
         Grabs the data from the Combine output
         """
         # Extract the contour from the ROOT (NLL) plot
         file = uproot.open(f"contours/{pair_name}.root")
         assert isinstance(file, uproot.ReadOnlyDirectory)
-        self.data_2d = {}
+        self.contours = {}
         for ci in [68, 95]: 
-            self.data_2d[ci] = file[f'graph{ci}_default_0;1'].values()
+            self.contours[ci] = file[f'graph{ci}_default_0;1'].values()
+        
+        # Get data
+        self.data_dir = 'data'
+        self.stem = (f"scan.{data_config['channel']}.{data_config['model']}." +
+                     f"{data_config['type']}.{data_config['attribute']}.")
+        self.data = loadData(
+            os.path.join(os.path.abspath(self.data_dir), 
+                         f"{self.stem}{pair_name}.root"),
+            list(data_config["POIs"].keys()), include_best=True)
+        
         file.close()
 
 class Interpolator(ABC):

@@ -28,7 +28,7 @@ def profileCombine1D(data_config: Data, out: str='out/default') -> None:
         interp = Combine1D(data_config, poi)
             
         # Save
-        d = {'x': interp.data_1d[poi], 'y': interp.data_1d['deltaNLL'], 'best': 0}
+        d = {'x': interp.data[poi], 'y': interp.data['deltaNLL'], 'best': 0}
         with open(os.path.join(out, f"{poi}_combine.pkl"), "wb") as f:
             pickle.dump(d, f)
             
@@ -44,11 +44,11 @@ def profileCombine2D(data_config: Data, out: str='out/default') -> None:
     poi_pairs = list(combinations(pois, 2))
     for pair in poi_pairs:
         pair_name = '_'.join(pair)
-        interp = Combine2D(pair_name)
+        interp = Combine2D(data_config, pair_name)
             
         # Save
         with open(os.path.join(out, f"{pair_name}_combine.pkl"), "wb") as f:
-            pickle.dump(interp.data_2d, f)
+            pickle.dump(interp.contours, f)
             
 def profileCombine(data_config: Data, out: str='out/default') -> None:
     """

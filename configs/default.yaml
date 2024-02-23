@@ -6,14 +6,14 @@ data:
   attribute: 'nominal'
   POIs:
     lchgXE3: 
-      bounds: [-35, 30]
+      bounds: [-35, 10]
     lchwXE2:
       bounds: [-5,5]
     lctgreXE1:
       bounds: [-15, 10]
   interpolator:
     mode: "RBF"
-    eps: 0.2
+    eps: 0.5
   splitting: "grid"
   fraction: 0.25
   subtractbest: False

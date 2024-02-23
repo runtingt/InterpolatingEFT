@@ -8,7 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from InterpolatingEFT.interpolator import rbfInterpolator
 from InterpolatingEFT.profiler import profileCombine, profileAll1D, profileAll2D
-from InterpolatingEFT.plotter import plotAllScan1D, plotAllScan2D, plotAllDiff1D
+from InterpolatingEFT.plotter import plotAllScan1D, plotAllScan2D, plotAllDiff1D, plotAllDiff2D, cornerScan
 from InterpolatingEFT.utils import loadConfig
 from InterpolatingEFT.toTable import toTable
 
@@ -41,10 +41,10 @@ if __name__ == "__main__":
         print("Done!")
         
         print("Profiling 1D...")
-        profileAll1D(interp, interp.pois, num=50, out=outdir)
+        # profileAll1D(interp, interp.pois, num=100, out=outdir)
         print("Done!")
         print("Profiling 2D (see logs for more)...")
-        profileAll2D(interp, interp.pois, num=5, out=outdir)
+        # profileAll2D(interp, interp.pois, num=100, out=outdir)
         print("Done!")        
         
         # Plot
@@ -58,6 +58,12 @@ if __name__ == "__main__":
         print("Done!")
         print("Plotting difference plots...")
         plotAllDiff1D(interp, config["data"], out=outdir)
+        plotAllDiff2D(interp, config["data"], out=outdir)
+        print("Done!")
+        print("Plotting corner plots...")
+        cornerScan(interp, 
+                   [f"rbfSpline({len(interp.data_train)})"]*len(interp.pois),
+                   out=outdir)
         print("Done!")
     else:
         raise NotImplementedError("Only RBF is implemented")

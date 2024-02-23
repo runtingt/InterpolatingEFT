@@ -23,7 +23,7 @@ def loadData(filename: str, POIs: List[str],
         pd.DataFrame: The data as a dataframe with a column for each WC
     """
     # Get dataframe
-    file = uproot.open(filename)
+    file = uproot.open(path=filename)
     assert isinstance(file, uproot.ReadOnlyDirectory)
     limit = file["limit"]
     assert isinstance(limit, uproot.TTree)
