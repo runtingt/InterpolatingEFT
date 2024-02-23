@@ -60,21 +60,31 @@ def plotScan1D(poi: str, label: str,
             fit = np.poly1d(np.polyfit(xs, ys, 8))
             ax.plot(xs_fine, fit(xs_fine), lw=10)
             ax.scatter(xs, ys, s=250, label="Combine")
-        ax.set_ylim(-0.5, 12)
+        ax.set_ylim(0, 12)
     
         if not save:
             # Add limits to plot
             shifts = [1.00, 3.84]
+            shiftlabels = ['68%', '95%']
             styles = ['--', '-.']
             x = xs_fine if i == 0 else xs
             y = fit(xs_fine) if i == 0 else ys
-            for shift, style in zip(shifts, styles):
+            for shift, style, label in zip(shifts, styles, shiftlabels):
                 idxs = np.argwhere(np.diff(np.sign(y-shift))).flatten()
                 for idx in idxs:
                     ax.plot([x[idx], x[idx]], [-0.5, y[idx]], 
                             lw=10, ls=style, c=colors[i])
+                # Add horizontal lines
                 ax.plot([np.min(x)*2, np.max(x)*2], [shift, shift], 
                         lw=5, ls='-', c='k', alpha=0.1, zorder=-5)
+                if i == 1:
+                    ax.text(0.995, (shift+0.1)/ax.get_ylim()[1], 
+                            f'{label}', transform=ax.transAxes,
+                            horizontalalignment='right', 
+                            fontsize=30, alpha=0.75)
+                    ax.text(0.01, 0.90, r"$\Delta NLL$",
+                            transform=ax.transAxes, horizontalalignment='left',
+                            fontweight='regular', fontsize=54, alpha=0.4)
            
     # Annotate
     if save:
@@ -212,16 +222,16 @@ def cornerScan(interp: rbfInterpolator,
             # Plot
             elif j == i:
                 plotScan1D(pois[i], label='', ax=ax)
-                ax.set_xlim((bounds[i][0]*1.075, bounds[i][1]*1.1))
+                ax.set_xlim((bounds[i][0]*1.075, bounds[i][1]*1.05))
                 ax.set_yticks([])
                 ax.tick_params(labelleft=False, left=False)
             else:
                 plotScan2D((pois[j], pois[i]), label='', ax=ax)
-                ax.set_xlim((bounds[j][0]*1.075, bounds[j][1]*1.1))
-                ax.set_ylim((bounds[i][0]*1.075, bounds[i][1]*1.1))
+                ax.set_xlim((bounds[j][0]*1.05, bounds[j][1]*1.075))
+                ax.set_ylim((bounds[i][0]*1.05, bounds[i][1]*1.075))
             
             # Label
-            if j == 0:
+            if j == 0 and i != 0:
                 ax.set_ylabel(tex_names[i], labelpad=paddings[i], fontsize=48)
             else:
                 ax.tick_params(labelleft=False)

@@ -6,7 +6,7 @@ data:
   attribute: 'nominal'
   POIs:
     lchgXE3: 
-      bounds: [-35, 10]
+      bounds: [-35, 12]
     lchwXE2:
       bounds: [-5,5]
     lctgreXE1:

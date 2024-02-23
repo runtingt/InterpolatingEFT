@@ -61,9 +61,7 @@ if __name__ == "__main__":
         plotAllDiff2D(interp, config["data"], out=outdir)
         print("Done!")
         print("Plotting corner plots...")
-        cornerScan(interp, 
-                   [f"rbfSpline({len(interp.data_train)})"]*len(interp.pois),
-                   out=outdir)
+        cornerScan(interp, out=outdir)
         print("Done!")
     else:
         raise NotImplementedError("Only RBF is implemented")
