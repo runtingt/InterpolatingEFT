@@ -4,10 +4,9 @@ Runs the script
 
 import os
 import argparse
-import pandas as pd
 from datetime import datetime
 from pathlib import Path
-from InterpolatingEFT.interpolator import rbfInterpolator, combineInterpolator
+from InterpolatingEFT.interpolator import rbfInterpolator
 from InterpolatingEFT.profiler import profileCombine, profileAll1D, profileAll2D
 from InterpolatingEFT.plotter import plotAllScan1D, plotAllScan2D, plotAllDiff1D, plotAllDiff2D, cornerScan
 from InterpolatingEFT.utils import loadConfig

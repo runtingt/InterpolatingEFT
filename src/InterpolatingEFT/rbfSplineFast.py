@@ -30,6 +30,11 @@ class rbfSplineFast:
             sys.exit("Error - initialise given points with more dimensions (%g) than ndim (%g)"%(len(self._parameter_keys),self._ndim))
 
         self._axis_pts = self._M**(1./self._ndim)
+        if self._rescaleAxis:
+            self.scaling = self._axis_pts/(np.max(self._input_points, axis=0) -
+                                           np.min(self._input_points, axis=0))
+        else:
+            self.scaling = 1
        
         self.calculateWeights()
 
@@ -46,11 +51,19 @@ class rbfSplineFast:
         if self._rescaleAxis: v=self._axis_pts*v/(np.max(points2, axis=0) - np.min(points2, axis=0))
         return np.power(v, 2)
 
+    def diff2_no_if(self, points1, points2):
+        v = points1[:, np.newaxis, :] - points2[np.newaxis, :, :]
+        return np.power(v*self.scaling, 2)
+
     def getDistSquare(self, col):
         return self.diff2(col, col)
         
     def getDistFromSquare(self, point, inp):
         dk2 = np.sum(self.diff2(point, inp), axis=-1).flatten()
+        return dk2
+    
+    def getDistFromSquare_no_if(self, point, inp):
+        dk2 = np.sum(self.diff2_no_if(point, inp), axis=-1).flatten()
         return dk2
 
     def getRadialArg(self, d2):
@@ -76,6 +89,27 @@ class rbfSplineFast:
             print ("Error - must have same variable labels, you provided - ",point.keys(),", I only know about - ",self._parameter_keys)
             return np.nan
         vals = self.radialFunc(self.getDistFromSquare(point.to_numpy(), self._input_points))
+        weighted_vals = self._weights * vals
+        return sum(weighted_vals)
+    
+    def evaluate_no_if(self,point):
+        vals = self.radialFunc(self.getDistFromSquare_no_if(point.to_numpy(), self._input_points))
+        weighted_vals = self._weights * vals
+        return sum(weighted_vals)
+    
+    def evaluate_no_pandas(self,point):
+        if not self._initialised:
+            print("Error - must first initialise spline with set of points before calling evaluate()") 
+            return np.nan
+        if point.shape[-1] != len(self._parameter_keys): 
+            print ("Error - shape mismatch")
+            return np.nan
+        vals = self.radialFunc(self.getDistFromSquare(point, self._input_points))
+        weighted_vals = self._weights * vals
+        return sum(weighted_vals)
+    
+    def evaluate_no_if_no_pandas(self,point):
+        vals = self.radialFunc(self.getDistFromSquare(point, self._input_points))
         weighted_vals = self._weights * vals
         return sum(weighted_vals)
 
