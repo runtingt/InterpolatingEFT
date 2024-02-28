@@ -4,9 +4,10 @@ Runs the script
 
 import os
 import argparse
+import pandas as pd
 from datetime import datetime
 from pathlib import Path
-from InterpolatingEFT.interpolator import rbfInterpolator
+from InterpolatingEFT.interpolator import rbfInterpolator, combineInterpolator
 from InterpolatingEFT.profiler import profileCombine, profileAll1D, profileAll2D
 from InterpolatingEFT.plotter import plotAllScan1D, plotAllScan2D, plotAllDiff1D, plotAllDiff2D, cornerScan
 from InterpolatingEFT.utils import loadConfig
@@ -41,10 +42,10 @@ if __name__ == "__main__":
         print("Done!")
         
         print("Profiling 1D...")
-        # profileAll1D(interp, interp.pois, num=100, out=outdir)
+        profileAll1D(interp, interp.pois, num=50, out=outdir)
         print("Done!")
         print("Profiling 2D (see logs for more)...")
-        # profileAll2D(interp, interp.pois, num=100, out=outdir)
+        profileAll2D(interp, interp.pois, num=50, out=outdir)
         print("Done!")        
         
         # Plot

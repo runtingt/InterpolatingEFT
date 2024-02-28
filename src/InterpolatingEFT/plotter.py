@@ -54,12 +54,13 @@ def plotScan1D(poi: str, label: str,
         xs = xs[mask]
         ys = ys[mask]
         if interp != 'combine':
-            ax.plot(xs, ys, lw=10, label=label)
+            ax.plot(xs, ys, lw=5, label=label)
+            # ax.scatter(xs, ys, s=125)
         else:
             xs_fine = np.linspace(np.min(xs), np.max(xs), 100)
             fit = np.poly1d(np.polyfit(xs, ys, 8))
-            ax.plot(xs_fine, fit(xs_fine), lw=10)
-            ax.scatter(xs, ys, s=250, label="Combine")
+            ax.plot(xs_fine, fit(xs_fine), lw=5)
+            ax.scatter(xs, ys, s=125, label="Combine")
         ax.set_ylim(0, 12)
     
         if not save:
@@ -73,16 +74,16 @@ def plotScan1D(poi: str, label: str,
                 idxs = np.argwhere(np.diff(np.sign(y-shift))).flatten()
                 for idx in idxs:
                     ax.plot([x[idx], x[idx]], [-0.5, y[idx]], 
-                            lw=10, ls=style, c=colors[i])
+                            lw=5, ls=style, c=colors[i])
                 # Add horizontal lines
                 ax.plot([np.min(x)*2, np.max(x)*2], [shift, shift], 
-                        lw=5, ls='-', c='k', alpha=0.1, zorder=-5)
+                        lw=2.5, ls='-', c='k', alpha=0.1, zorder=-5)
                 if i == 1:
                     ax.text(0.995, (shift+0.1)/ax.get_ylim()[1], 
                             f'{label}', transform=ax.transAxes,
                             horizontalalignment='right', 
                             fontsize=30, alpha=0.75)
-                    ax.text(0.01, 0.90, r"$\Delta NLL$",
+                    ax.text(0.01, 0.875, r"$\Delta NLL$",
                             transform=ax.transAxes, horizontalalignment='left',
                             fontweight='regular', fontsize=54, alpha=0.4)
            
@@ -142,7 +143,7 @@ def plotScan2D(pair: Tuple[str, str], label: str,
             styles = ['dashed', 'dashdot']
         if interp == 'combine':
             for ci, ls in zip(d.keys(), styles):
-                ax.plot(d[ci][0], d[ci][1], ls=ls, lw=10,
+                ax.plot(d[ci][0], d[ci][1], ls=ls, lw=5,
                         label=f"Combine {ci}% CL", color='#5790fc')
         else:
             X = np.array(d['x'])
@@ -156,9 +157,9 @@ def plotScan2D(pair: Tuple[str, str], label: str,
             cls = ["68%", "95%"]
             for shift, cl, style in zip(shifts, cls, styles):
                 ax.contour(X, Y, Z, levels=[shift], 
-                           zorder=5, colors='#f89c20', linestyles=style, linewidths=10)
+                           zorder=5, colors='#f89c20', linestyles=style, linewidths=5)
                 ax.plot(1, label=f"{label} {cl} CL", color='#f89c20', 
-                        linestyle=style, lw=10)
+                        linestyle=style, lw=5)
 
     if save:
         # Annotate
@@ -199,8 +200,9 @@ def cornerScan(interp: rbfInterpolator,
     bounds = interp.bounds
     fig = plt.figure(figsize=(45, 30))
     gs = GridSpec(len(pois), len(pois), hspace=0., wspace=0.)
-    paddings = [50, 15, -15]
-    tex_names = [r'$C_{Hg}\times 10^3$', r'$C_{Hw}\times 10^2$', r'$\Re{(C_{tg})}\times 10^1$']
+    paddings = [50, 15, -15, 5]
+    tex_names = [r'$C_{Hg}\times 10^3$', r'$C_{HW}\times 10^2$', 
+                 r'$\Re{(C_{tg})}\times 10^1$', r'$C_{Hj}^{(3)}\times 10^1$']
     
     # Plot
     for i in range(len(pois)):
@@ -210,23 +212,23 @@ def cornerScan(interp: rbfInterpolator,
                 ax.axis('off')
                 # Add legend
                 if i == 0 and j == len(pois)-1:
-                    ax.plot(1, label="Combine", color=colors[0], lw=10)
-                    ax.plot(1, label=r"Combine $68\%$ CL", color=colors[0], lw=10, ls='--')
-                    ax.plot(1, label=r"Combine $95\%$ CL", color=colors[0], lw=10, ls='-.')
+                    ax.plot(1, label="Combine", color=colors[0], lw=5)
+                    ax.plot(1, label=r"Combine $68\%$ CL", color=colors[0], lw=5, ls='--')
+                    ax.plot(1, label=r"Combine $95\%$ CL", color=colors[0], lw=5, ls='-.')
                     
-                    ax.plot(1, label="Interpolator", color=colors[1], lw=10)
-                    ax.plot(1, label=r"Interpolator $68\%$ CL", color=colors[1], lw=10, ls='--')
-                    ax.plot(1, label=r"Interpolator $95\%$ CL", color=colors[1], lw=10, ls='-.')
+                    ax.plot(1, label="Interpolator", color=colors[1], lw=5)
+                    ax.plot(1, label=r"Interpolator $68\%$ CL", color=colors[1], lw=5, ls='--')
+                    ax.plot(1, label=r"Interpolator $95\%$ CL", color=colors[1], lw=5, ls='-.')
                     
                     ax.legend(loc='upper right', handlelength=2, prop={'size': 54})
             # Plot
             elif j == i:
-                plotScan1D(pois[i], label='', ax=ax)
+                plotScan1D(pois[i], label='', ax=ax, out=out)
                 ax.set_xlim((bounds[i][0]*1.075, bounds[i][1]*1.05))
                 ax.set_yticks([])
                 ax.tick_params(labelleft=False, left=False)
             else:
-                plotScan2D((pois[j], pois[i]), label='', ax=ax)
+                plotScan2D((pois[j], pois[i]), label='', ax=ax, out=out)
                 ax.set_xlim((bounds[j][0]*1.05, bounds[j][1]*1.075))
                 ax.set_ylim((bounds[i][0]*1.05, bounds[i][1]*1.075))
             
@@ -241,7 +243,7 @@ def cornerScan(interp: rbfInterpolator,
                 ax.tick_params(labelbottom=False)
             ax.tick_params(labelsize=40)
     
-    plt.savefig(os.path.join(out, f"cornerScan.pdf"), facecolor='white',
+    plt.savefig(os.path.join(out, f"cornerScan.png"), facecolor='white',
                 bbox_inches='tight', dpi=250)
 
 def plotDiff1D(poi: str, interp: rbfInterpolator, data_config: Data,
@@ -275,9 +277,9 @@ def plotDiff1D(poi: str, interp: rbfInterpolator, data_config: Data,
     
     # Plot
     fig, ax = plt.subplots(1, 1, figsize=(16, 9))
-    ax.scatter(xs[mask], diffs[mask], label='test', s=100)
+    ax.scatter(xs[mask], diffs[mask], label='test', s=50)
     ax.scatter(xs[outliers], np.clip(diffs[outliers], -0.5, 0.5),
-               marker=7, c='r', zorder=10, s=200)
+               marker=7, c='r', zorder=10, s=100)
     ax.set_xlabel(poi)
     ax.set_ylabel(r"True - predicted")
     ax.set_ylim(-0.5, 0.5)

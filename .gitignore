@@ -7,3 +7,5 @@ runs
 mypy*
 .mypy*
 __pycache__
+diagnostics
+debug.py

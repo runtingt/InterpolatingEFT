@@ -32,7 +32,7 @@ def loadData(filename: str, POIs: List[str],
     
     # Clean up data
     df = df.drop_duplicates()
-    df = df[df["deltaNLL"] <= 1E5] # NOTE: Clip large values
+    df = df[df["deltaNLL"] < 9999] # NOTE: Clip large values
     if not include_best: df = df[df["deltaNLL"] != 0]
     df = df.reset_index()
     

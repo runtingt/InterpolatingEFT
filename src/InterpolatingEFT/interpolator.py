@@ -39,7 +39,11 @@ class Combine2D:
         Grabs the data from the Combine output
         """
         # Extract the contour from the ROOT (NLL) plot
-        file = uproot.open(f"contours/{pair_name}.root")
+        channel = data_config['channel']
+        model = data_config['model']
+        filename = (f"contours/plot.{channel}.{model}.observed." +
+                    f"nominal.{pair_name}.root")
+        file = uproot.open(filename)
         assert isinstance(file, uproot.ReadOnlyDirectory)
         self.contours = {}
         for ci in [68, 95]: 
@@ -107,6 +111,102 @@ class Interpolator(ABC):
             OptimizeResult: The result of optimising
         """
         pass
+    
+class combineInterpolator(Interpolator):
+    """
+    Interpolates a surface using a grid of points
+
+    :param Interpolator: The abstract base class
+    :type Interpolator: Interpolator
+    """
+    def __init__(self) -> None:
+        """
+        Initialises the interpolator
+        """
+        self.data_dir = 'data'
+        super().__init__()
+    def initialise(self, data_config: Data) -> None:
+        """
+        Loads data for the interpolator
+
+        :param data_config: Options for the data
+        :type data_config: Data
+        """
+        super().initialise(data_config)
+        
+        # Setup
+        self.pois = list(data_config["POIs"].keys())
+        self.bounds = [tuple(*val.values()) 
+                       for val in data_config["POIs"].values()]
+        self.stem = (f"scan.{data_config['channel']}.{data_config['model']}." +
+                     f"{data_config['type']}.{data_config['attribute']}.")
+
+        # Grab data
+        data_train, data_test  = loadAndSplit(
+            os.path.join(os.path.abspath(self.data_dir), 
+                        f"{self.stem}{'_'.join(self.pois)}.root"), 
+            data_config, include_best=True, split=1)
+        
+        # Get splits as dataframes
+        datasets = []
+        for data in [data_train, data_test]:
+            assert isinstance(data.dataset, NLLDataset)
+            data_tup = data.dataset[list(data.indices)]
+            datasets.append(NLLDataset(*data_tup, data.dataset.POIs))
+        self.best = datasets[0].X[np.argmin(datasets[0].Y)].detach().numpy()
+        self.data_train = datasets[0].toFrame()
+        self.data_test = datasets[1].toFrame()
+        
+    def evaluate(self, point: Any) -> float:
+        """
+        Evalutes the interpolator at a given point
+        NOTE: This will return np.inf for any point not in the dataset
+
+        :param point: The point to evaluate the dataset at
+        :type point: Any
+        :return: The interpolator evaluated at the point
+        :rtype: float
+        """
+        assert isinstance(point, pd.DataFrame)
+        # Convert to numpy arrays
+        point_arr = point.to_numpy()
+        data_arr = self.data_train[self.pois].to_numpy()
+        
+        # Match the entire row
+        match = np.argwhere(np.sum(data_arr == point_arr, 
+                                   axis=1) == 4).flatten()
+        
+        # Return matched value
+        if match.size:
+            return self.data_train.iloc[match]['deltaNLL'].to_numpy()
+        else:
+            return np.nan
+    
+    def minimize(self, free_keys: List[str], 
+                 fixed_vals: Dict[str, List[float]]) -> OptimizeResult:
+        """
+        Minimize the interpolator using SciPy
+
+        Args:
+            free_keys (List[str]): The keys to minimise over
+            fixed_vals (Dict[str, List[float]]): The fixed values in the fit
+
+        Returns:
+            OptimizeResult: The result of optimising
+        """
+        if free_keys == self.pois:
+            return OptimizeResult({'x': [999]*len(self.pois), 'fun': 0.0})
+        
+        # Get the rows which match the fixed values
+        data = self.data_train
+        for key, value in fixed_vals.items():
+            data = data[data[key] == value[0]]
+
+        # Minimise deltaNLL       
+        best = data.iloc[data['deltaNLL'].argmin()]
+        
+        return OptimizeResult({'x': best[self.pois].to_numpy(),
+                               'fun': best['deltaNLL']})
 
 class rbfInterpolator(Interpolator):
     """

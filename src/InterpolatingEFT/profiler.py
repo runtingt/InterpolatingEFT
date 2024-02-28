@@ -12,7 +12,7 @@ from functools import partial
 from itertools import combinations
 from typing import List
 from InterpolatingEFT.utils import Data
-from InterpolatingEFT.interpolator import rbfInterpolator, Combine1D, Combine2D
+from InterpolatingEFT.interpolator import rbfInterpolator, combineInterpolator, Combine1D, Combine2D
 from InterpolatingEFT.logger import TqdmToLogger
 
 def profileCombine1D(data_config: Data, out: str='out/default') -> None:
@@ -61,7 +61,7 @@ def profileCombine(data_config: Data, out: str='out/default') -> None:
     profileCombine1D(data_config, out)
     profileCombine2D(data_config, out)
 
-def profile1D(interp: rbfInterpolator, poi: str, 
+def profile1D(interp: rbfInterpolator | combineInterpolator, poi: str, 
               num: int=50, out: str='out/default') -> None:
     """
     Get the 1D profiled scan for the specified POI, using an interpolator
@@ -72,12 +72,17 @@ def profile1D(interp: rbfInterpolator, poi: str,
         num (int, optional): The number of scan points. Defaults to 50.
         out (str, optional): The out dir. Defaults to 'out/default'.
     """
+    print(poi)
     # Get free keys
     free_keys = [key for key in interp.pois if key != poi]
     
     # Get bounds for fixed parameter
     bounds = interp.bounds[interp.pois.index(poi)]
-    xs = np.linspace(bounds[0], bounds[1], num=num)
+    
+    if isinstance(interp, rbfInterpolator):
+        xs = np.linspace(bounds[0], bounds[1], num=num)
+    elif isinstance(interp, combineInterpolator):
+        xs = np.sort(interp.data_train[poi].unique())
     ys = []
     
     # Profile
@@ -92,8 +97,9 @@ def profile1D(interp: rbfInterpolator, poi: str,
     with open(os.path.join(out, f"{poi}_rbf.pkl"), "wb") as f:
         pickle.dump(d, f)
    
-def profileAll1D(interp: rbfInterpolator, pois: List[str], 
-                 num: int=50, out: str='out/default') -> None:
+def profileAll1D(interp: rbfInterpolator | combineInterpolator,
+                 pois: List[str], num: int=50, 
+                 out: str='out/default') -> None:
     """
     Get the 1D profiled scan for all POIs, using an interpolator
 
