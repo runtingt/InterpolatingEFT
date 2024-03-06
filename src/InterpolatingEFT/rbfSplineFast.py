@@ -121,6 +121,16 @@ class rbfSplineFast:
         else:
             self._scale = 1
 
+<<<<<<< HEAD
+=======
+        self._axis_pts = self._M**(1./self._ndim)
+        if self._rescaleAxis:
+            self.scaling = self._axis_pts/(np.max(self._input_points, axis=0) -
+                                           np.min(self._input_points, axis=0))
+        else:
+            self.scaling = 1
+       
+>>>>>>> f1a859125d5ad7a565ea2b2ad664140f2a2c5806
         self.calculateWeights()
 
     def initialise(self, input_data: pd.DataFrame, target_col: str, 
@@ -130,6 +140,7 @@ class rbfSplineFast:
         try:
             self.radialFunc = self._radialFuncs[radial_func]()
         except KeyError:
+<<<<<<< HEAD
             sys.exit(f"Error - function '{radial_func}' not in " +
                      f"'{list(self._radialFuncs.keys())}'")
         self._initialise(input_data, target_col, eps, rescaleAxis)
@@ -139,6 +150,40 @@ class rbfSplineFast:
                         rescaleAxis: bool=True) -> None:
         df = pd.read_csv(input_file, index_col=False, delimiter=' ')
         self.initialise(df,target_col,radial_func,eps,rescaleAxis)
+=======
+            sys.exit("Error - function '%s' not in '%s'"%(radial_func, list(self.radialFuncs.keys())))
+        self._initialise(input_points,target_col,eps,rescaleAxis)
+    
+    def diff2(self, points1, points2):
+        # The interpolator must have been initialised on points2
+        v = points1[:, np.newaxis, :] - points2[np.newaxis, :, :]
+        if self._rescaleAxis: v=self._axis_pts*v/(np.max(points2, axis=0) - np.min(points2, axis=0))
+        return np.power(v, 2)
+
+    def diff2_no_if(self, points1, points2):
+        v = points1[:, np.newaxis, :] - points2[np.newaxis, :, :]
+        return np.power(v*self.scaling, 2)
+
+    def getDistSquare(self, col):
+        return self.diff2(col, col)
+        
+    def getDistFromSquare(self, point, inp):
+        dk2 = np.sum(self.diff2(point, inp), axis=-1).flatten()
+        return dk2
+    
+    def getDistFromSquare_no_if(self, point, inp):
+        dk2 = np.sum(self.diff2_no_if(point, inp), axis=-1).flatten()
+        return dk2
+
+    def getRadialArg(self, d2):
+        return (d2/(self._eps*self._eps))
+
+    def radialGauss(self,d2):
+        return np.e**(-1*self.getRadialArg(d2))
+    
+    def radialMultiQuad(self,d2):
+        return np.sqrt(1+self.getRadialArg(d2)) 
+>>>>>>> f1a859125d5ad7a565ea2b2ad664140f2a2c5806
         
     def diff(self, points1: npt.NDArray[np.float32],
              points2: npt.NDArray[np.float32]) -> npt.NDArray[np.float32]:
@@ -182,6 +227,7 @@ class rbfSplineFast:
         
         # Get val and grads
         weighted_vals = self._weights * vals
+<<<<<<< HEAD
         ret_val = np.sum(weighted_vals)
         
         return ret_val.astype(float)
@@ -195,6 +241,30 @@ class rbfSplineFast:
         if not set(point.keys()) == set(self._parameter_keys): 
             print(f"Error - {point.keys()} must match {self._parameter_keys}")
             return np.array(np.nan)
+=======
+        return sum(weighted_vals)
+    
+    def evaluate_no_if(self,point):
+        vals = self.radialFunc(self.getDistFromSquare_no_if(point.to_numpy(), self._input_points))
+        weighted_vals = self._weights * vals
+        return sum(weighted_vals)
+    
+    def evaluate_no_pandas(self,point):
+        if not self._initialised:
+            print("Error - must first initialise spline with set of points before calling evaluate()") 
+            return np.nan
+        if point.shape[-1] != len(self._parameter_keys): 
+            print ("Error - shape mismatch")
+            return np.nan
+        vals = self.radialFunc(self.getDistFromSquare(point, self._input_points))
+        weighted_vals = self._weights * vals
+        return sum(weighted_vals)
+    
+    def evaluate_no_if_no_pandas(self,point):
+        vals = self.radialFunc(self.getDistFromSquare(point, self._input_points))
+        weighted_vals = self._weights * vals
+        return sum(weighted_vals)
+>>>>>>> f1a859125d5ad7a565ea2b2ad664140f2a2c5806
 
         # Evaluate spline at point
         point_arr = point.to_numpy()

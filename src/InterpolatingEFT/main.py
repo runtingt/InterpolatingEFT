@@ -4,7 +4,6 @@ Runs the script
 
 import os
 import argparse
-import pandas as pd
 from datetime import datetime
 from pathlib import Path
 from InterpolatingEFT.interpolator import rbfInterpolator
