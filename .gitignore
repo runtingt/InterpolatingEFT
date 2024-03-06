@@ -9,3 +9,4 @@ mypy*
 __pycache__
 diagnostics
 debug.py
+speedtest.py

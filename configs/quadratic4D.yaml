@@ -1,0 +1,22 @@
+---
+data:
+  channel: 'hgg_statonly'
+  model: 'STXStoSMEFTExpandedStatOnly4D'
+  type: 'observed'
+  attribute: 'nominal'
+  POIs:
+    chgXE3: 
+      bounds: [-25, 20]
+    chwXE2:
+      bounds: [-5, 7]
+    ctgreXE1:
+      bounds: [-17, 11]
+    chj3XE1:
+      bounds: [-5, 5]
+  interpolator:
+    mode: "RBF"
+    eps: 0.5
+  splitting: "grid"
+  fraction: 0.75
+  subtractbest: False
+...

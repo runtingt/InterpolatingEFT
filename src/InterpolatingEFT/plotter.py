@@ -272,7 +272,7 @@ def plotDiff1D(poi: str, interp: rbfInterpolator, data_config: Data,
     diffs = np.full(ys.shape, np.nan)
     scan_points = data_test[interp.pois]
     for i in range(len(scan_points)):
-        diffs[i] = ys[i] - interp.evaluate(scan_points.iloc[i:i+1])
+        diffs[i] = ys[i] - interp.evaluate(scan_points.iloc[i:i+1])[0]
     outliers = np.argwhere(np.abs(diffs) > 0.5).flatten()
     
     # Plot
@@ -346,11 +346,11 @@ def plotDiff2D(pois: List[str], interp: rbfInterpolator, data_config: Data,
     y_edges = getEdges(ys[mask])
     
     # TODO vectorise
-    # Compute differences to true value
+    # Compute differences to true value>
     diffs = np.full(zs.shape, np.nan)
     scan_points = data_test[interp.pois][1:]
     for i in range(len(scan_points)):
-        diffs[i] = zs[i] - interp.evaluate(scan_points.iloc[i:i+1])
+        diffs[i] = zs[i] - interp.evaluate(scan_points.iloc[i:i+1])[0]
 
     # Plot with shifted weights so all weights are positive
     fig, ax = plt.subplots(1, 1, figsize=(16, 9))

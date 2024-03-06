@@ -194,7 +194,8 @@ class GridSplitter(Splitter):
         
 def loadAndSplit(file: str, data_config: Data, split: float,
                  include_best: bool=False) -> Tuple[Subset[NLLDataset],
-                                                    Subset[NLLDataset]]:
+                                                    Subset[NLLDataset],
+                                                    NLLDataset]:
     """
     Loads the dataset as a train/test split
 
@@ -209,7 +210,8 @@ def loadAndSplit(file: str, data_config: Data, split: float,
         NotImplementedError: Raised if an option other than 'grid' is specified
 
     Returns:
-        Tuple[Subset[NLLDataset], Subset[NLLDataset]]: The train/test split
+        Tuple[Subset[NLLDataset], Subset[NLLDataset], NLLDataset]: The train /\
+            test split and the best fit point
     """
     # Load
     poi_map = {poi: i for i, poi in enumerate(data_config["POIs"])}
@@ -217,9 +219,15 @@ def loadAndSplit(file: str, data_config: Data, split: float,
     dataset = NLLDataset(X, Y, poi_map)
     
     # Split
+    best = NLLDataset(torch.tensor(np.full(len(poi_map), np.inf)),
+                      torch.tensor(np.inf), poi_map)
+    if include_best:
+        best = NLLDataset(*dataset[:1], poi_map)
+        dataset = NLLDataset(*dataset[1:], poi_map)
+    
     if data_config["splitting"] == "grid":
         gs = GridSplitter(dataset)
-        train, test = gs.split(split)
-        return train, test
+        train, test = gs.split(split)        
+        return train, test, best
     else:
         raise NotImplementedError("Only grid splitting is implemented")    

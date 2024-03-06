@@ -6,7 +6,8 @@ import os
 import pandas as pd
 import numpy as np
 import uproot
-from typing import Any, Dict, List
+import numpy.typing as npt
+from typing import Any, Dict, List, Tuple
 from abc import ABC, abstractmethod
 from InterpolatingEFT.utils import Data
 from InterpolatingEFT.dataSplitter import loadAndSplit
@@ -142,7 +143,7 @@ class combineInterpolator(Interpolator):
                      f"{data_config['type']}.{data_config['attribute']}.")
 
         # Grab data
-        data_train, data_test  = loadAndSplit(
+        data_train, data_test, best  = loadAndSplit(
             os.path.join(os.path.abspath(self.data_dir), 
                         f"{self.stem}{'_'.join(self.pois)}.root"), 
             data_config, include_best=True, split=1)
@@ -153,7 +154,8 @@ class combineInterpolator(Interpolator):
             assert isinstance(data.dataset, NLLDataset)
             data_tup = data.dataset[list(data.indices)]
             datasets.append(NLLDataset(*data_tup, data.dataset.POIs))
-        self.best = datasets[0].X[np.argmin(datasets[0].Y)].detach().numpy()
+        datasets[0].append(best)
+        self.best = best.X.detach().numpy()[0]
         self.data_train = datasets[0].toFrame()
         self.data_test = datasets[1].toFrame()
         
@@ -239,7 +241,7 @@ class rbfInterpolator(Interpolator):
             
         # Get a splits as dataframes
         datasets = [] 
-        data_train, data_test  = loadAndSplit(
+        data_train, data_test, best = loadAndSplit(
             os.path.join(os.path.abspath(self.data_dir), 
                          f"{self.stem}{'_'.join(self.pois)}.root"), 
             data_config, include_best=True,
@@ -248,7 +250,8 @@ class rbfInterpolator(Interpolator):
             assert isinstance(data.dataset, NLLDataset)
             data_tup = data.dataset[list(data.indices)]
             datasets.append(NLLDataset(*data_tup, data.dataset.POIs))
-        self.best = datasets[0].X[np.argmin(datasets[0].Y)].detach().numpy()
+        datasets[0].append(best)
+        self.best = best.X.detach().numpy()[0]
         self.data_train = datasets[0].toFrame()
         self.data_test = datasets[1].toFrame()
         
@@ -258,7 +261,8 @@ class rbfInterpolator(Interpolator):
                                eps=data_config['interpolator']['eps'],
                                rescaleAxis=True)
         
-    def evaluate(self, point: pd.DataFrame) -> float:
+    def evaluate(self, point: pd.DataFrame) -> Tuple[float, 
+                                                     npt.NDArray[np.float32]]:
         """
         Evaluates the interpolator at a specified point
 
@@ -269,10 +273,11 @@ class rbfInterpolator(Interpolator):
             float: The output of the interpolator at that point
         """
         super().evaluate(point)
-        return self.spline.evaluate(point)
+        return self.spline.evaluate(point), self.spline.evaluate_grad(point)[0]
     
     def _minimizeWrapper(self, coeffs: List[float], free_keys: List[str],
-                         fixed_vals: Dict[str, List[float]]) -> float:
+                         fixed_vals: Dict[str, List[float]]
+                         ) -> Tuple[float, npt.NDArray[np.float32]]:
         """
         Handles the passing of parameters from SciPy to the interpolator
 
@@ -288,16 +293,19 @@ class rbfInterpolator(Interpolator):
             
         # Create a blank df
         d = {poi: np.nan for poi in self.pois}
+        mask = {poi: False for poi in self.pois}
         
         # Fill in the free values
         for key, coeff in zip(free_keys, coeffs):
             d[key] = coeff
+            mask[key] = True
         
         # Fill in the fixed values
         for key, val in fixed_vals.items():
             d[key] = val[0]
 
-        return self.evaluate(pd.DataFrame([d]))
+        val, grad = self.evaluate(pd.DataFrame([d]))
+        return val, grad[list(mask.values())]
     
     def minimize(self, free_keys: List[str], 
                  fixed_vals: Dict[str, List[float]]) -> OptimizeResult:
@@ -323,5 +331,5 @@ class rbfInterpolator(Interpolator):
             bounds.append(self.bounds[idx])
     
         res = minimize(self._minimizeWrapper, x0=start, bounds=bounds,
-                       args=(free_keys, fixed_vals))
+                       jac=True, args=(free_keys, fixed_vals), options={'maxls':50})
         return res
