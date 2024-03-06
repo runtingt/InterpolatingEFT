@@ -6,13 +6,8 @@ import os
 import pandas as pd
 import numpy as np
 import uproot
-<<<<<<< HEAD
 import numpy.typing as npt
 from typing import Any, Dict, List, Tuple
-=======
-from numpy import typing as npt
-from typing import Any, Dict, List
->>>>>>> f1a859125d5ad7a565ea2b2ad664140f2a2c5806
 from abc import ABC, abstractmethod
 from InterpolatingEFT.utils import Data
 from InterpolatingEFT.dataSplitter import loadAndSplit
@@ -279,45 +274,6 @@ class rbfInterpolator(Interpolator):
         """
         super().evaluate(point)
         return self.spline.evaluate(point), self.spline.evaluate_grad(point)[0]
-    
-    def evaluate_no_if(self, point: pd.DataFrame) -> float:
-        """
-        Evaluates the interpolator at a specified point
-
-        Args:
-            point (Any): The point to evaluate at
-
-        Returns:
-            float: The output of the interpolator at that point
-        """
-        super().evaluate(point)
-        return self.spline.evaluate_no_if(point)
-    
-    def evaluate_no_pandas(self, point: npt.NDArray[np.float32]) -> float:
-        """
-        Evaluates the interpolator at a specified point
-
-        Args:
-            point npt.NDArray[np.float32]: The point to evaluate at
-
-        Returns:
-            float: The output of the interpolator at that point
-        """
-        super().evaluate(point)
-        return self.spline.evaluate_no_pandas(point)
-    
-    def evaluate_no_if_no_pandas(self, point: npt.NDArray[np.float32]) -> float:
-        """
-        Evaluates the interpolator at a specified point
-
-        Args:
-            point npt.NDArray[np.float32]: The point to evaluate at
-
-        Returns:
-            float: The output of the interpolator at that point
-        """
-        super().evaluate(point)
-        return self.spline.evaluate_no_if_no_pandas(point)
     
     def _minimizeWrapper(self, coeffs: List[float], free_keys: List[str],
                          fixed_vals: Dict[str, List[float]]
